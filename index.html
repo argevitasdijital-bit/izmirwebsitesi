@@ -860,6 +860,39 @@
             backdrop-filter: blur(4px);
         }
         .gallery-card:hover .gc-arrow { background: #e8734a; border-color: #e8734a; }
+        .gallery-card[data-img] { cursor: zoom-in; }
+
+        /* ── LİGHTBOX ── */
+        .lightbox {
+            display: none; position: fixed; inset: 0; z-index: 9999;
+            background: rgba(0,0,0,.92); backdrop-filter: blur(8px);
+            align-items: center; justify-content: center; padding: 24px;
+        }
+        .lightbox.open { display: flex; animation: lbIn .25s ease; }
+        @keyframes lbIn { from { opacity:0; } to { opacity:1; } }
+        .lightbox-inner {
+            position: relative; max-width: 960px; width: 100%;
+            max-height: 90vh; display: flex; align-items: center; justify-content: center;
+        }
+        .lightbox-inner img {
+            max-width: 100%; max-height: 88vh;
+            border-radius: 16px; box-shadow: 0 32px 80px rgba(0,0,0,.6);
+            animation: lbImgIn .3s ease;
+        }
+        @keyframes lbImgIn { from { transform: scale(.94); opacity:0; } to { transform: scale(1); opacity:1; } }
+        .lightbox-close {
+            position: absolute; top: -16px; right: -16px;
+            width: 40px; height: 40px; border-radius: 50%;
+            background: #e8734a; border: none; color: #fff;
+            font-size: 1rem; cursor: pointer; display: flex;
+            align-items: center; justify-content: center;
+            box-shadow: 0 4px 16px rgba(232,115,74,.4); transition: all .2s;
+        }
+        .lightbox-close:hover { background: #d45a32; transform: scale(1.1); }
+        .lightbox-label {
+            position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%);
+            font-size: .8rem; color: rgba(255,255,255,.5); white-space: nowrap;
+        }
 
         @media (max-width: 900px) { .gallery-grid { grid-template-columns: repeat(2,1fr); } }
         @media (max-width: 560px) { .gallery-grid { grid-template-columns: 1fr; } }
@@ -1078,7 +1111,7 @@
             <div class="gallery-grid">
 
                 <!-- Restoran 1 -->
-                <div class="gallery-card visible" data-cat="restoran">
+                <div class="gallery-card visible" data-cat="restoran" data-img="assets/gallery-restaurant-1.png" data-label="Restoran & Kafe — Sıcak & Davetkar Tarz">
                     <div class="gc-visual restoran" style="padding:0; height:280px;">
                         <div class="gc-arrow"><i class="fa-solid fa-arrow-up-right"></i></div>
                         <img src="assets/gallery-restaurant-1.png" alt="Restoran Web Tasarım Örneği"
@@ -1328,6 +1361,15 @@
         </div>
     </section>
 
+    <!-- LIGHTBOX -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-inner">
+            <button class="lightbox-close" id="lbClose"><i class="fa-solid fa-xmark"></i></button>
+            <img id="lbImg" src="" alt="Tasarım Önizlemesi">
+            <div class="lightbox-label" id="lbLabel"></div>
+        </div>
+    </div>
+
     <!-- FOOTER -->
     <footer class="footer">
         <div class="container">
@@ -1399,6 +1441,30 @@
                 if (a.getAttribute('href') === '#' + current) a.classList.add('active');
             });
         });
+
+        // Lightbox
+        const lb = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lbImg');
+        const lbLabel = document.getElementById('lbLabel');
+
+        document.querySelectorAll('.gallery-card[data-img]').forEach(card => {
+            card.addEventListener('click', () => {
+                lbImg.src = card.dataset.img;
+                lbLabel.textContent = card.dataset.label || '';
+                lb.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        document.getElementById('lbClose').addEventListener('click', closeLb);
+        lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+
+        function closeLb() {
+            lb.classList.remove('open');
+            document.body.style.overflow = '';
+            setTimeout(() => { lbImg.src = ''; }, 300);
+        }
 
         // Galeri filtresi
         document.querySelectorAll('.gf-btn').forEach(btn => {
