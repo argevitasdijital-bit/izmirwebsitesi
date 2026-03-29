@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DentaVita — Modern Diş Kliniği | Alsancak, İzmir</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg:       #07090f;
+            --bg2:      #0c101a;
+            --surface:  #121824;
+            --border:   rgba(255,255,255,0.06);
+            --gold:     #c4973f;
+            --gold-lt:  #d4aa55;
+            --gold-pale:rgba(196,151,63,0.12);
+            --white:    #f5f0e8;
+            --muted:    #8890a8;
+            --text:     #e8e4dc;
+        }
+
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            padding: 28px 60px;
+            display: flex; align-items: center; justify-content: space-between;
+            transition: all .4s;
+        }
+        nav.scrolled {
+            background: rgba(7,9,15,.93);
+            backdrop-filter: blur(20px);
+            padding: 18px 60px;
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-logo { font-weight: 800; font-size: 1.25rem; color: var(--white); letter-spacing: -.5px; }
+        .nav-logo span { color: var(--gold); }
+        .nav-links { display: flex; gap: 40px; list-style: none; }
+        .nav-links a {
+            color: var(--muted); text-decoration: none;
+            font-size: .86rem; font-weight: 500; letter-spacing: .3px;
+            transition: color .2s; display: flex; align-items: center; gap: 6px;
+        }
+        .nav-links a::before { content: '•'; color: var(--gold); font-size: .45rem; }
+        .nav-links a:hover { color: var(--white); }
+        .nav-cta {
+            padding: 10px 26px; border: 1px solid var(--gold); border-radius: 50px;
+            color: var(--gold); text-decoration: none;
+            font-size: .84rem; font-weight: 600; transition: all .3s;
+        }
+        .nav-cta:hover { background: var(--gold); color: #07090f; }
+
+        /* ── HERO ── */
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr auto;
+            position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(to right, var(--border) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+            background-size: calc(100%/3) 110px;
+            pointer-events: none; z-index: 0;
+        }
+
+        /* Left column */
+        .hero-left {
+            padding: 160px 40px 60px 60px;
+            display: flex; flex-direction: column; justify-content: space-between;
+            border-right: 1px solid var(--border);
+            position: relative; z-index: 1;
+        }
+        .hero-tagline {
+            font-size: .76rem; color: var(--muted);
+            letter-spacing: 2px; text-transform: uppercase; line-height: 2;
+        }
+        .hero-headline { font-family: 'Cormorant Garamond', serif; }
+        .hero-headline .ln1 {
+            font-size: clamp(3.2rem, 5.5vw, 5.2rem); font-weight: 300;
+            color: var(--muted); display: block; line-height: .95;
+        }
+        .hero-headline .ln2 {
+            font-size: clamp(3.2rem, 5.5vw, 5.2rem); font-weight: 600;
+            color: var(--white); display: block; line-height: .95;
+        }
+        .hero-headline .ln3 {
+            font-size: clamp(3.2rem, 5.5vw, 5.2rem); font-weight: 300;
+            font-style: italic; color: var(--gold); display: block; line-height: 1.1;
+        }
+        .hero-bottom-left { display: flex; flex-direction: column; gap: 22px; }
+        .hero-desc { font-size: .88rem; color: var(--muted); line-height: 1.75; max-width: 290px; }
+        .hero-btn {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: var(--gold); color: #07090f;
+            padding: 14px 28px; border-radius: 50px;
+            font-weight: 700; font-size: .86rem; text-decoration: none;
+            width: fit-content; transition: all .3s;
+        }
+        .hero-btn:hover { background: var(--gold-lt); transform: translateY(-2px); }
+
+        /* Center column */
+        .hero-center {
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 120px 20px 60px;
+            border-right: 1px solid var(--border);
+            position: relative; z-index: 1;
+        }
+        .tooth-visual {
+            position: relative; display: flex;
+            align-items: center; justify-content: center;
+            width: 280px; height: 320px;
+        }
+        .tooth-glow-outer {
+            position: absolute; width: 320px; height: 320px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(196,151,63,.18) 0%, transparent 70%);
+            animation: pulse 3.5s ease-in-out infinite;
+        }
+        .tooth-glow-mid {
+            position: absolute; width: 200px; height: 200px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(196,151,63,.28) 0%, transparent 70%);
+        }
+        .tooth-icon {
+            font-size: 140px; color: var(--gold);
+            filter: drop-shadow(0 0 48px rgba(196,151,63,.55));
+            animation: float 4.5s ease-in-out infinite;
+            position: relative; z-index: 1;
+        }
+        .hero-award { margin-top: 44px; text-align: center; }
+        .hero-award-label { font-size: .7rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+        .hero-award-value { font-size: .88rem; color: var(--white); font-weight: 600; margin-top: 5px; }
+
+        /* Right column */
+        .hero-right {
+            padding: 160px 50px 60px 40px;
+            display: flex; flex-direction: column; justify-content: space-between;
+            position: relative; z-index: 1;
+        }
+        .hero-right-label {
+            font-size: .75rem; letter-spacing: 2px;
+            text-transform: uppercase; color: var(--gold); margin-bottom: 10px;
+        }
+        .hero-right-desc { font-size: .88rem; color: var(--muted); line-height: 1.75; }
+        .doctor-cards { display: flex; flex-direction: column; gap: 12px; }
+        .doc-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 16px; padding: 16px 18px;
+            display: flex; align-items: center; gap: 14px;
+            cursor: pointer; transition: all .3s;
+        }
+        .doc-card:hover { border-color: var(--gold); transform: translateX(4px); }
+        .doc-av {
+            width: 46px; height: 46px; border-radius: 12px; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: .9rem;
+        }
+        .av1 { background: linear-gradient(135deg,#1a3530,#0c2020); color: #4ade80; }
+        .av2 { background: linear-gradient(135deg,#2a1535,#150c25); color: #c084fc; }
+        .av3 { background: linear-gradient(135deg,#352015,#200e08); color: #fb923c; }
+        .doc-info h4 { font-size: .86rem; font-weight: 700; color: var(--white); }
+        .doc-info p  { font-size: .76rem; color: var(--muted); margin-top: 2px; }
+
+        /* Bottom bar */
+        .hero-bar {
+            grid-column: 1 / -1;
+            border-top: 1px solid var(--border);
+            display: flex; justify-content: space-around; align-items: center;
+            padding: 24px 60px; position: relative; z-index: 1;
+        }
+        .hbar-item { text-align: center; }
+        .hbar-label { font-size: .68rem; color: var(--muted); letter-spacing: 1.8px; text-transform: uppercase; }
+        .hbar-val { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 600; color: var(--white); margin-top: 4px; }
+
+        /* ── ANIMATIONS ── */
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-18px)} }
+        @keyframes pulse { 0%,100%{opacity:.5;transform:scale(1)} 50%{opacity:1;transform:scale(1.1)} }
+
+        /* ── COMMON ── */
+        section { padding: 110px 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 60px; }
+        .sec-label { font-size: .73rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+        .sec-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.4rem, 4vw, 3.6rem);
+            font-weight: 600; color: var(--white); line-height: 1.12;
+        }
+        .sec-title em { font-style: italic; color: var(--gold); font-weight: 300; }
+
+        /* ── SERVICES ── */
+        .services { background: var(--bg2); }
+        .svc-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 56px; }
+        .svc-grid {
+            display: grid; grid-template-columns: repeat(3,1fr);
+            gap: 1px; background: var(--border);
+            border: 1px solid var(--border); border-radius: 24px; overflow: hidden;
+        }
+        .svc-card {
+            background: var(--surface); padding: 36px 30px;
+            transition: all .4s; cursor: default;
+            position: relative; overflow: hidden;
+        }
+        .svc-card::after {
+            content: ''; position: absolute;
+            bottom: 0; left: 0; right: 0; height: 2px;
+            background: var(--gold); transform: scaleX(0); transition: transform .4s;
+        }
+        .svc-card:hover { background: #161e2e; }
+        .svc-card:hover::after { transform: scaleX(1); }
+        .svc-num { font-size: .68rem; color: var(--muted); letter-spacing: 2px; margin-bottom: 24px; }
+        .svc-icon { font-size: 1.9rem; color: var(--gold); margin-bottom: 18px; }
+        .svc-name { font-size: .98rem; font-weight: 700; color: var(--white); margin-bottom: 10px; }
+        .svc-desc { font-size: .83rem; color: var(--muted); line-height: 1.75; }
+
+        /* ── WHY ── */
+        .why { background: var(--bg); }
+        .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+        .why-visual {
+            position: relative; height: 460px;
+            background: linear-gradient(135deg, var(--surface), #0d1423);
+            border: 1px solid var(--border); border-radius: 28px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+            overflow: hidden;
+        }
+        .why-visual::before {
+            content: ''; position: absolute; top: -60px; right: -60px;
+            width: 240px; height: 240px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(196,151,63,.12), transparent 70%);
+        }
+        .why-big-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 8rem; font-weight: 600; color: var(--gold); line-height: 1;
+            filter: drop-shadow(0 0 32px rgba(196,151,63,.3));
+        }
+        .why-big-label { font-size: .88rem; color: var(--muted); text-align: center; line-height: 1.6; }
+        .why-badge {
+            position: absolute; bottom: 24px; right: 24px;
+            background: var(--gold); color: #07090f;
+            padding: 8px 18px; border-radius: 50px;
+            font-size: .76rem; font-weight: 700;
+        }
+        .why-content { }
+        .why-points { display: flex; flex-direction: column; gap: 30px; margin-top: 44px; }
+        .why-point { display: flex; gap: 20px; align-items: flex-start; }
+        .why-point-icon {
+            width: 48px; height: 48px; flex-shrink: 0;
+            background: var(--gold-pale); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--gold); font-size: 1.05rem;
+        }
+        .why-point h4 { font-size: .97rem; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+        .why-point p { font-size: .85rem; color: var(--muted); line-height: 1.75; }
+
+        /* ── TEAM ── */
+        .team { background: var(--bg2); }
+        .team-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 56px; }
+        .team-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 24px; overflow: hidden; transition: all .4s;
+        }
+        .team-card:hover { border-color: var(--gold); transform: translateY(-8px); }
+        .team-photo {
+            height: 200px; display: flex; align-items: center; justify-content: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4.5rem; font-weight: 600; color: rgba(255,255,255,.12);
+            letter-spacing: -2px;
+        }
+        .tp1 { background: linear-gradient(135deg,#1a3530,#0c2020); }
+        .tp2 { background: linear-gradient(135deg,#2a1535,#150c25); }
+        .tp3 { background: linear-gradient(135deg,#352015,#200e08); }
+        .team-info { padding: 24px 26px; }
+        .team-name { font-size: 1rem; font-weight: 700; color: var(--white); }
+        .team-title { font-size: .8rem; color: var(--gold); margin: 5px 0 12px; }
+        .team-bio { font-size: .83rem; color: var(--muted); line-height: 1.75; }
+
+        /* ── APPOINTMENT ── */
+        .appointment { background: var(--bg); }
+        .apt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+        .apt-info p { color: var(--muted); line-height: 1.8; margin-top: 20px; margin-bottom: 36px; font-size: .9rem; }
+        .contact-list { display: flex; flex-direction: column; gap: 14px; }
+        .contact-row { display: flex; align-items: center; gap: 14px; font-size: .88rem; color: var(--muted); }
+        .contact-row i { color: var(--gold); width: 16px; }
+        .apt-form { display: flex; flex-direction: column; gap: 14px; }
+        .apt-form input, .apt-form select, .apt-form textarea {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 12px; padding: 14px 18px;
+            color: var(--white); font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: .88rem; transition: all .3s; width: 100%;
+        }
+        .apt-form input::placeholder, .apt-form textarea::placeholder { color: var(--muted); }
+        .apt-form select option { background: #121824; }
+        .apt-form input:focus, .apt-form select:focus, .apt-form textarea:focus {
+            outline: none; border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(196,151,63,.1);
+        }
+        .apt-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .apt-submit {
+            background: var(--gold); color: #07090f; border: none; border-radius: 12px;
+            padding: 16px; font-weight: 700; font-size: .93rem;
+            cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: all .3s; display: flex; align-items: center; justify-content: center; gap: 8px;
+            margin-top: 6px;
+        }
+        .apt-submit:hover { background: var(--gold-lt); transform: translateY(-2px); }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--bg2);
+            border-top: 1px solid var(--border);
+            padding: 36px 0;
+        }
+        .footer-inner { display: flex; justify-content: space-between; align-items: center; }
+        .footer-logo { font-weight: 800; font-size: 1.1rem; color: var(--white); }
+        .footer-logo span { color: var(--gold); }
+        .footer-mid { font-size: .79rem; color: var(--muted); text-align: center; line-height: 1.7; }
+        .footer-mid strong { color: var(--gold); }
+        .footer-right { text-align: right; }
+        .footer-time {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem; font-weight: 600; color: var(--gold); display: block; line-height: 1;
+        }
+        .footer-loc { font-size: .78rem; color: var(--muted); margin-top: 4px; }
+
+        /* ── FADE ── */
+        .fade-up { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+        .fade-up.vis { opacity: 1; transform: translateY(0); }
+        .fade-up:nth-child(2) { transition-delay: .1s; }
+        .fade-up:nth-child(3) { transition-delay: .2s; }
+        .fade-up:nth-child(4) { transition-delay: .3s; }
+        .fade-up:nth-child(5) { transition-delay: .4s; }
+        .fade-up:nth-child(6) { transition-delay: .5s; }
+
+        /* ── MOBILE ── */
+        @media (max-width: 900px) {
+            nav { padding: 20px 24px; }
+            nav.scrolled { padding: 14px 24px; }
+            .nav-links { display: none; }
+            .hero { grid-template-columns: 1fr; }
+            .hero-left { padding: 120px 24px 40px; border-right: none; }
+            .hero-center { display: none; }
+            .hero-right { padding: 24px; border-top: 1px solid var(--border); }
+            .hero-bar { padding: 20px 24px; flex-wrap: wrap; gap: 16px; justify-content: center; }
+            .container { padding: 0 24px; }
+            section { padding: 72px 0; }
+            .svc-grid { grid-template-columns: 1fr; }
+            .svc-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+            .why-grid { grid-template-columns: 1fr; gap: 44px; }
+            .why-visual { height: 260px; }
+            .team-grid { grid-template-columns: 1fr; }
+            .apt-grid { grid-template-columns: 1fr; gap: 44px; }
+            .apt-row { grid-template-columns: 1fr; }
+            .footer-inner { flex-direction: column; gap: 20px; text-align: center; }
+            .footer-right { text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+    <div class="nav-logo">Denta<span>Vita</span></div>
+    <ul class="nav-links">
+        <li><a href="#hizmetler">Hizmetler</a></li>
+        <li><a href="#neden-biz">Neden Biz</a></li>
+        <li><a href="#ekip">Ekibimiz</a></li>
+        <li><a href="#randevu">İletişim</a></li>
+    </ul>
+    <a href="#randevu" class="nav-cta">Randevu Al</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+    <!-- Sol -->
+    <div class="hero-left">
+        <p class="hero-tagline">Alsancak, İzmir<br>Modern Diş Kliniği &nbsp;·&nbsp; Est. 2012</p>
+        <h1 class="hero-headline">
+            <span class="ln1">Mükemmel</span>
+            <span class="ln2">Gülüşünüz</span>
+            <span class="ln3">için.</span>
+        </h1>
+        <div class="hero-bottom-left">
+            <p class="hero-desc">Önleyici bakımdan karmaşık restorasyonlara, diş sağlığınıza kapsamlı ve modern bir yaklaşım sunuyoruz.</p>
+            <a href="#randevu" class="hero-btn">
+                <i class="fa-solid fa-calendar-check"></i>
+                Ücretsiz Konsültasyon
+            </a>
+        </div>
+    </div>
+
+    <!-- Orta -->
+    <div class="hero-center">
+        <div class="tooth-visual">
+            <div class="tooth-glow-outer"></div>
+            <div class="tooth-glow-mid"></div>
+            <i class="fa-solid fa-tooth tooth-icon"></i>
+        </div>
+        <div class="hero-award">
+            <div class="hero-award-label">İzmir'in Güvenilen Kliniği</div>
+            <div class="hero-award-value">2024 Sağlık Ödülü Sahibi</div>
+        </div>
+    </div>
+
+    <!-- Sağ -->
+    <div class="hero-right">
+        <div>
+            <div class="hero-right-label">Uzman Ekibimiz</div>
+            <p class="hero-right-desc">Alanında uzman diş hekimlerimizle tanışın ve size en uygun tedavi planını birlikte oluşturun.</p>
+        </div>
+        <div class="doctor-cards">
+            <div class="doc-card">
+                <div class="doc-av av1">DA</div>
+                <div class="doc-info">
+                    <h4>Dr. Ayşe Kaya</h4>
+                    <p>İmplant &amp; Oral Cerrahi</p>
+                </div>
+            </div>
+            <div class="doc-card">
+                <div class="doc-av av2">ME</div>
+                <div class="doc-info">
+                    <h4>Dr. Mehmet Erdem</h4>
+                    <p>Estetik Diş Hekimliği</p>
+                </div>
+            </div>
+            <div class="doc-card">
+                <div class="doc-av av3">SY</div>
+                <div class="doc-info">
+                    <h4>Dr. Selin Yıldız</h4>
+                    <p>Ortodonti &amp; Şeffaf Plak</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alt Bar -->
+    <div class="hero-bar">
+        <div class="hbar-item">
+            <div class="hbar-label">Mutlu Hasta</div>
+            <div class="hbar-val">3.200+</div>
+        </div>
+        <div class="hbar-item">
+            <div class="hbar-label">Yıl Deneyim</div>
+            <div class="hbar-val">12</div>
+        </div>
+        <div class="hbar-item">
+            <div class="hbar-label">Uzman Hekim</div>
+            <div class="hbar-val">3</div>
+        </div>
+        <div class="hbar-item">
+            <div class="hbar-label">Memnuniyet</div>
+            <div class="hbar-val">%98</div>
+        </div>
+        <div class="hbar-item">
+            <div class="hbar-label">Alsancak, İzmir</div>
+            <div class="hbar-val" id="heroTime">--:--</div>
+        </div>
+    </div>
+</div>
+
+<!-- HİZMETLER -->
+<section class="services" id="hizmetler">
+    <div class="container">
+        <div class="svc-header">
+            <div>
+                <div class="sec-label">Hizmetlerimiz</div>
+                <h2 class="sec-title">Her ihtiyacınız için<br><em>uzman çözümler</em></h2>
+            </div>
+            <a href="#randevu" class="nav-cta">Randevu Al →</a>
+        </div>
+        <div class="svc-grid">
+            <div class="svc-card fade-up">
+                <div class="svc-num">01</div>
+                <div class="svc-icon"><i class="fa-solid fa-tooth"></i></div>
+                <div class="svc-name">İmplant Tedavisi</div>
+                <div class="svc-desc">Eksik dişleriniz için en kalıcı ve doğal görünümlü çözüm. Tek seans implant seçeneği mevcuttur.</div>
+            </div>
+            <div class="svc-card fade-up">
+                <div class="svc-num">02</div>
+                <div class="svc-icon"><i class="fa-solid fa-star"></i></div>
+                <div class="svc-name">Estetik Diş Hekimliği</div>
+                <div class="svc-desc">Gülüş tasarımı, porselen kaplama ve kompozit bonding ile hayalinizdeki gülüşe kavuşun.</div>
+            </div>
+            <div class="svc-card fade-up">
+                <div class="svc-num">03</div>
+                <div class="svc-icon"><i class="fa-solid fa-circle-nodes"></i></div>
+                <div class="svc-name">Ortodonti</div>
+                <div class="svc-desc">Şeffaf plak ve geleneksel braket seçenekleri ile düzgün, sağlıklı dişlere ulaşın.</div>
+            </div>
+            <div class="svc-card fade-up">
+                <div class="svc-num">04</div>
+                <div class="svc-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                <div class="svc-name">Diş Beyazlatma</div>
+                <div class="svc-desc">Profesyonel ofis tipi beyazlatma ile tek seansta 8 tona kadar daha beyaz dişlere kavuşun.</div>
+            </div>
+            <div class="svc-card fade-up">
+                <div class="svc-num">05</div>
+                <div class="svc-icon"><i class="fa-solid fa-shield-heart"></i></div>
+                <div class="svc-name">Koruyucu Diş Hekimliği</div>
+                <div class="svc-desc">Düzenli kontrol, temizlik ve fissür örtücü uygulamaları ile diş sağlığınızı koruyun.</div>
+            </div>
+            <div class="svc-card fade-up">
+                <div class="svc-num">06</div>
+                <div class="svc-icon"><i class="fa-solid fa-child-reaching"></i></div>
+                <div class="svc-name">Çocuk Diş Hekimliği</div>
+                <div class="svc-desc">Çocuklarınızın diş sağlığı için özel, korku bariyerini aşan ve eğlenceli bir klinik ortamı sunuyoruz.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- NEDEN BİZ -->
+<section class="why" id="neden-biz">
+    <div class="container">
+        <div class="why-grid">
+            <div class="why-visual fade-up">
+                <div class="why-big-num">12</div>
+                <div class="why-big-label">Yıllık Klinik Deneyimi<br>ve Binlerce Mutlu Hasta</div>
+                <div class="why-badge">ISO 9001 Sertifikalı</div>
+            </div>
+            <div class="why-content">
+                <div class="sec-label">Neden DentaVita?</div>
+                <h2 class="sec-title">Farkımızı<br><em>hissedeceksiniz</em></h2>
+                <div class="why-points">
+                    <div class="why-point fade-up">
+                        <div class="why-point-icon"><i class="fa-solid fa-microscope"></i></div>
+                        <div>
+                            <h4>İleri Teknoloji Ekipmanlar</h4>
+                            <p>3D tomografi, dijital röntgen ve CAD/CAM sistemi ile en hassas tanı ve tedavi imkânı sunuyoruz.</p>
+                        </div>
+                    </div>
+                    <div class="why-point fade-up">
+                        <div class="why-point-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                        <div>
+                            <h4>Ağrısız Tedavi Protokolü</h4>
+                            <p>Özel sedasyon seçenekleri ve ağrısız enjeksiyon teknikleri ile tedavi süreci artık tamamen stressiz.</p>
+                        </div>
+                    </div>
+                    <div class="why-point fade-up">
+                        <div class="why-point-icon"><i class="fa-solid fa-clock"></i></div>
+                        <div>
+                            <h4>Esnek Randevu Saatleri</h4>
+                            <p>Hafta içi 08:00–20:00, Cumartesi 09:00–17:00 hizmetinizdeyiz. Online randevu da mümkün.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- EKİP -->
+<section class="team" id="ekip">
+    <div class="container">
+        <div class="sec-label">Uzman Ekibimiz</div>
+        <h2 class="sec-title">Deneyimli <em>hekimlerimizle</em><br>tanışın</h2>
+        <div class="team-grid">
+            <div class="team-card fade-up">
+                <div class="team-photo tp1">AK</div>
+                <div class="team-info">
+                    <div class="team-name">Dr. Ayşe Kaya</div>
+                    <div class="team-title">İmplant &amp; Oral Cerrahi Uzmanı</div>
+                    <div class="team-bio">Ege Üniversitesi Diş Hekimliği mezunu. 1.200'den fazla implant operasyonu gerçekleştirmiş, alanının öncü isimlerinden.</div>
+                </div>
+            </div>
+            <div class="team-card fade-up">
+                <div class="team-photo tp2">ME</div>
+                <div class="team-info">
+                    <div class="team-name">Dr. Mehmet Erdem</div>
+                    <div class="team-title">Estetik Diş Hekimi</div>
+                    <div class="team-bio">İstanbul Üniversitesi mezunu, New York'ta gülüş tasarımı eğitimi almış. Porselen kaplama ve gülüş estetiği konusunda uzman.</div>
+                </div>
+            </div>
+            <div class="team-card fade-up">
+                <div class="team-photo tp3">SY</div>
+                <div class="team-info">
+                    <div class="team-name">Dr. Selin Yıldız</div>
+                    <div class="team-title">Ortodonti Uzmanı</div>
+                    <div class="team-bio">Hacettepe Üniversitesi Ortodonti doktoru. Invisalign sertifikalı uygulayıcı. Çocuk ve yetişkin ortodontisinde 8 yıl deneyim.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- RANDEVU -->
+<section class="appointment" id="randevu">
+    <div class="container">
+        <div class="apt-grid">
+            <div class="apt-info">
+                <div class="sec-label">Randevu</div>
+                <h2 class="sec-title">Ücretsiz<br><em>konsültasyon</em><br>alın</h2>
+                <p>İlk muayene ücretsizdir. Formu doldurun, sizi 24 saat içinde arayalım ve size en uygun tedavi planını birlikte belirleyelim.</p>
+                <div class="contact-list">
+                    <div class="contact-row"><i class="fa-solid fa-phone"></i><span>0232 XXX XX XX</span></div>
+                    <div class="contact-row"><i class="fa-brands fa-whatsapp"></i><span>0532 XXX XX XX (WhatsApp)</span></div>
+                    <div class="contact-row"><i class="fa-solid fa-location-dot"></i><span>Alsancak Mah. Kıbrıs Şehitleri Cd. No:45, Konak/İzmir</span></div>
+                    <div class="contact-row"><i class="fa-solid fa-clock"></i><span>Hf. içi 08:00–20:00 &nbsp;|&nbsp; Cts 09:00–17:00</span></div>
+                </div>
+            </div>
+            <form class="apt-form" onsubmit="return false;">
+                <div class="apt-row">
+                    <input type="text" placeholder="Adınız Soyadınız">
+                    <input type="tel" placeholder="Telefon Numaranız">
+                </div>
+                <select>
+                    <option value="" disabled selected>Hizmet Seçin</option>
+                    <option>İmplant Tedavisi</option>
+                    <option>Estetik Diş Hekimliği</option>
+                    <option>Ortodonti / Şeffaf Plak</option>
+                    <option>Diş Beyazlatma</option>
+                    <option>Koruyucu Diş Hekimliği</option>
+                    <option>Çocuk Diş Hekimliği</option>
+                    <option>Diğer</option>
+                </select>
+                <textarea rows="4" placeholder="Bize kısaca durumunuzu anlatın (opsiyonel)..."></textarea>
+                <button class="apt-submit">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    Randevu Talebi Gönder
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <div class="footer-inner">
+            <div class="footer-logo">Denta<span>Vita</span></div>
+            <div class="footer-mid">
+                © 2025 DentaVita Diş Kliniği · Tüm hakları saklıdır.<br>
+                Bu site <strong>İzmir Websitesi</strong> tarafından tasarlanmıştır.
+            </div>
+            <div class="footer-right">
+                <span class="footer-time" id="footerTime">--:--</span>
+                <div class="footer-loc">Alsancak, İzmir</div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Navbar scroll
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 50));
+
+    // Canlı saat
+    function tick() {
+        const t = new Date().toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'});
+        document.getElementById('heroTime').textContent = t;
+        document.getElementById('footerTime').textContent = t;
+    }
+    tick(); setInterval(tick, 1000);
+
+    // Scroll animasyonları
+    const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
