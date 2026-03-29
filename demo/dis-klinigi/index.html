@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DentaVita — Modern Diş Kliniği | Alsancak, İzmir</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -25,7 +25,7 @@
 
         html { scroll-behavior: smooth; }
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Satoshi', sans-serif;
             background: var(--bg);
             color: var(--dark);
             line-height: 1.6;
@@ -50,7 +50,7 @@
             border-bottom: 1px solid var(--border);
         }
         .nav-logo {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Satoshi', sans-serif;
             font-weight: 800; font-size: 1.3rem; color: var(--dark); letter-spacing: -.5px;
         }
         .nav-logo span { color: var(--gold); }
@@ -66,7 +66,7 @@
             padding: 11px 26px; border: 1.5px solid var(--dark); border-radius: 50px;
             color: var(--dark); text-decoration: none;
             font-size: .84rem; font-weight: 600; transition: all .3s;
-            font-family: 'Syne', sans-serif;
+            font-family: 'Satoshi', sans-serif;
         }
         .nav-cta:hover { background: var(--dark); color: #fff; }
 
@@ -99,21 +99,26 @@
             font-size: .72rem; color: var(--muted);
             letter-spacing: 2.5px; text-transform: uppercase; line-height: 2;
         }
-        .hero-headline { font-family: 'Syne', sans-serif; }
+        .hero-headline { font-family: 'Satoshi', sans-serif; }
         .hero-headline .ln1 {
-            font-size: clamp(3rem, 5.2vw, 5rem);
-            font-weight: 400; color: var(--muted);
-            display: block; line-height: .95;
+            font-size: clamp(3.2rem, 5.5vw, 5.4rem);
+            font-weight: 300; color: var(--muted);
+            display: block; line-height: 1.05; letter-spacing: -.5px;
         }
         .hero-headline .ln2 {
-            font-size: clamp(3rem, 5.2vw, 5rem);
-            font-weight: 800; color: var(--dark);
-            display: block; line-height: .95;
+            font-size: clamp(3.2rem, 5.5vw, 5.4rem);
+            font-weight: 300; color: var(--muted);
+            display: block; line-height: 1.05; letter-spacing: -.5px;
         }
         .hero-headline .ln3 {
-            font-size: clamp(3rem, 5.2vw, 5rem);
-            font-weight: 800; color: var(--gold);
-            display: block; line-height: 1.05;
+            font-size: clamp(3.2rem, 5.5vw, 5.4rem);
+            font-weight: 700; color: var(--dark);
+            display: block; line-height: 1.05; letter-spacing: -1px;
+        }
+        .hero-headline .ln4 {
+            font-size: clamp(3.2rem, 5.5vw, 5.4rem);
+            font-weight: 700; color: var(--gold);
+            display: block; line-height: 1.05; letter-spacing: -1px;
         }
         .hero-bottom-left { display: flex; flex-direction: column; gap: 22px; }
         .hero-desc { font-size: .88rem; color: var(--muted); line-height: 1.8; max-width: 290px; }
@@ -121,7 +126,7 @@
             display: inline-flex; align-items: center; gap: 10px;
             background: var(--dark); color: #fff;
             padding: 15px 30px; border-radius: 50px;
-            font-family: 'Syne', sans-serif; font-weight: 700; font-size: .86rem;
+            font-family: 'Satoshi', sans-serif; font-weight: 700; font-size: .86rem;
             text-decoration: none; width: fit-content; transition: all .3s;
         }
         .hero-btn:hover { background: var(--gold); transform: translateY(-2px); }
@@ -157,7 +162,7 @@
         .hero-award { margin-top: 40px; text-align: center; }
         .hero-award-label { font-size: .68rem; color: var(--muted); letter-spacing: 2.5px; text-transform: uppercase; }
         .hero-award-value {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Satoshi', sans-serif;
             font-size: .9rem; color: var(--dark); font-weight: 700; margin-top: 5px;
         }
 
@@ -168,7 +173,7 @@
             position: relative; z-index: 1;
         }
         .hero-right-label {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Satoshi', sans-serif;
             font-size: .7rem; letter-spacing: 2.5px;
             text-transform: uppercase; color: var(--gold); margin-bottom: 10px;
         }
@@ -185,12 +190,12 @@
         .doc-av {
             width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
             display: flex; align-items: center; justify-content: center;
-            font-family: 'Syne', sans-serif; font-weight: 800; font-size: .85rem;
+            font-family: 'Satoshi', sans-serif; font-weight: 800; font-size: .85rem;
         }
         .av1 { background: #e8f4f0; color: #1a7a5f; }
         .av2 { background: #f0e8f4; color: #6a1a8a; }
         .av3 { background: #f4ede8; color: #8a3a1a; }
-        .doc-info h4 { font-family: 'Syne', sans-serif; font-size: .84rem; font-weight: 700; color: var(--dark); }
+        .doc-info h4 { font-family: 'Satoshi', sans-serif; font-size: .84rem; font-weight: 700; color: var(--dark); }
         .doc-info p  { font-size: .75rem; color: var(--muted); margin-top: 2px; }
 
         /* Alt bar */
@@ -204,7 +209,7 @@
         .hbar-item { text-align: center; }
         .hbar-label { font-size: .67rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
         .hbar-val {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Satoshi', sans-serif;
             font-size: 1.6rem; font-weight: 800; color: var(--dark); margin-top: 4px; line-height: 1;
         }
 
@@ -216,12 +221,12 @@
         section { padding: 110px 0; }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 60px; }
         .sec-label {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Satoshi', sans-serif;
             font-size: .7rem; letter-spacing: 3px; text-transform: uppercase;
             color: var(--gold); margin-bottom: 14px;
         }
         .sec-title {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Satoshi', sans-serif;
             font-size: clamp(2.2rem, 3.8vw, 3.4rem);
             font-weight: 800; color: var(--dark); line-height: 1.1;
         }
@@ -247,12 +252,12 @@
         .svc-card:hover { background: #fdf9f4; }
         .svc-card:hover::after { transform: scaleX(1); }
         .svc-num {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Satoshi', sans-serif;
             font-size: .67rem; color: var(--muted); letter-spacing: 2px; margin-bottom: 24px;
         }
         .svc-icon { font-size: 1.8rem; color: var(--gold); margin-bottom: 18px; }
         .svc-name {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Satoshi', sans-serif;
             font-size: .97rem; font-weight: 700; color: var(--dark); margin-bottom: 10px;
         }
         .svc-desc { font-size: .83rem; color: var(--muted); line-height: 1.75; }
@@ -273,7 +278,7 @@
             background: radial-gradient(circle, rgba(184,131,46,.2), transparent 70%);
         }
         .why-big-num {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Satoshi', sans-serif;
             font-size: 9rem; font-weight: 800; color: #fff; line-height: 1;
             position: relative; z-index: 1;
         }
@@ -286,7 +291,7 @@
             position: absolute; bottom: 24px; right: 24px;
             background: var(--gold); color: #fff;
             padding: 8px 18px; border-radius: 50px;
-            font-family: 'Syne', sans-serif; font-size: .74rem; font-weight: 700;
+            font-family: 'Satoshi', sans-serif; font-size: .74rem; font-weight: 700;
         }
         .why-points { display: flex; flex-direction: column; gap: 30px; margin-top: 44px; }
         .why-point { display: flex; gap: 20px; align-items: flex-start; }
@@ -297,7 +302,7 @@
             color: var(--gold); font-size: 1rem;
         }
         .why-point h4 {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Satoshi', sans-serif;
             font-size: .95rem; font-weight: 700; color: var(--dark); margin-bottom: 6px;
         }
         .why-point p { font-size: .85rem; color: var(--muted); line-height: 1.75; }
@@ -312,14 +317,14 @@
         .team-card:hover { border-color: var(--gold); transform: translateY(-8px); box-shadow: 0 16px 40px rgba(0,0,0,.08); }
         .team-photo {
             height: 200px; display: flex; align-items: center; justify-content: center;
-            font-family: 'Syne', sans-serif; font-size: 4rem; font-weight: 800;
+            font-family: 'Satoshi', sans-serif; font-size: 4rem; font-weight: 800;
             color: rgba(255,255,255,.3); letter-spacing: -2px;
         }
         .tp1 { background: linear-gradient(135deg,#1a4a3f,#0c2a24); }
         .tp2 { background: linear-gradient(135deg,#2a1a4a,#160c2a); }
         .tp3 { background: linear-gradient(135deg,#4a2a1a,#2a160c); }
         .team-info { padding: 24px 26px; }
-        .team-name { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; color: var(--dark); }
+        .team-name { font-family: 'Satoshi', sans-serif; font-size: 1rem; font-weight: 800; color: var(--dark); }
         .team-title { font-size: .79rem; color: var(--gold); font-weight: 600; margin: 5px 0 12px; }
         .team-bio { font-size: .83rem; color: var(--muted); line-height: 1.75; }
 
@@ -334,7 +339,7 @@
         .apt-form input, .apt-form select, .apt-form textarea {
             background: var(--surface); border: 1.5px solid var(--border);
             border-radius: 12px; padding: 14px 18px;
-            color: var(--dark); font-family: 'Inter', sans-serif;
+            color: var(--dark); font-family: 'Satoshi', sans-serif;
             font-size: .88rem; transition: all .3s; width: 100%;
         }
         .apt-form input::placeholder, .apt-form textarea::placeholder { color: var(--muted); }
@@ -345,7 +350,7 @@
         .apt-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .apt-submit {
             background: var(--dark); color: #fff; border: none; border-radius: 12px;
-            padding: 16px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: .9rem;
+            padding: 16px; font-family: 'Satoshi', sans-serif; font-weight: 700; font-size: .9rem;
             cursor: pointer; transition: all .3s;
             display: flex; align-items: center; justify-content: center; gap: 8px;
             margin-top: 4px;
@@ -355,13 +360,13 @@
         /* ── FOOTER ── */
         footer { background: var(--dark); padding: 36px 0; }
         .footer-inner { display: flex; justify-content: space-between; align-items: center; }
-        .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: #fff; }
+        .footer-logo { font-family: 'Satoshi', sans-serif; font-weight: 800; font-size: 1.1rem; color: #fff; }
         .footer-logo span { color: var(--gold); }
         .footer-mid { font-size: .78rem; color: rgba(255,255,255,.4); text-align: center; line-height: 1.7; }
         .footer-mid strong { color: var(--gold); }
         .footer-right { text-align: right; }
         .footer-time {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Satoshi', sans-serif;
             font-size: 1.6rem; font-weight: 800; color: #fff; display: block; line-height: 1;
         }
         .footer-loc { font-size: .77rem; color: rgba(255,255,255,.4); margin-top: 4px; }
@@ -420,7 +425,8 @@
         <h1 class="hero-headline">
             <span class="ln1">Modern</span>
             <span class="ln2">Bakım,</span>
-            <span class="ln3">Mükemmel Gülüş.</span>
+            <span class="ln3">Mükemmel</span>
+            <span class="ln4">Gülüş.</span>
         </h1>
         <div class="hero-bottom-left">
             <p class="hero-desc">Önleyici bakımdan karmaşık restorasyonlara kadar diş sağlığınıza kapsamlı ve modern bir yaklaşım sunuyoruz.</p>
