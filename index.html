@@ -599,8 +599,8 @@
             font-size: 1.05rem; line-height: 1.7;
         }
 
-        .contact-btns { display: flex; flex-direction: column; gap: 14px; margin-bottom: 36px; }
-        .contact-btns .btn { justify-content: center; }
+        .contact-btns { display: flex; flex-direction: row; gap: 12px; margin-bottom: 36px; flex-wrap: wrap; }
+        .contact-btns .btn { justify-content: center; flex: 1; min-width: 180px; }
 
         .contact-details { display: flex; flex-direction: column; gap: 18px; }
 
@@ -965,7 +965,7 @@
     <section class="contact" id="iletisim">
         <div class="container">
             <div class="contact-grid">
-                <div class="fade-up">
+                <div class="contact-left fade-up">
                     <h2>Hazır mısınız?<br>Hemen Başlayalım!</h2>
                     <p>Projenizi konuşmak için bize ulaşın. Size en uygun çözümü birlikte belirleyelim.</p>
                     <div class="contact-btns">
@@ -1209,9 +1209,19 @@
 
                 // Load portfolio
                 const { data: portfolio } = await db.from('portfolio').select('*').order('order_index');
-                const portfolioHtml = portfolio.map(p => `
+                const portfolioBgs = [
+                    { bg: 'linear-gradient(135deg,#ecfdf5,#d1fae5)', color: '#059669' },
+                    { bg: 'linear-gradient(135deg,#fef3c7,#fde68a)', color: '#d97706' },
+                    { bg: 'linear-gradient(135deg,#eff6ff,#dbeafe)', color: '#2563eb' },
+                    { bg: 'linear-gradient(135deg,#fdf4ff,#f3e8ff)', color: '#7c3aed' },
+                ];
+                const portfolioHtml = portfolio.map((p, i) => {
+                    const style = portfolioBgs[i % portfolioBgs.length];
+                    return `
                     <div class="portfolio-card fade-up">
-                        <div class="portfolio-preview"><i class="fa-solid ${p.icon_type}"></i></div>
+                        <div class="portfolio-preview" style="background:${style.bg};color:${style.color}">
+                            <i class="fa-solid ${p.icon_type}"></i>
+                        </div>
                         <div class="portfolio-info">
                             <div class="portfolio-cat">${p.category}</div>
                             <h3>${p.name}</h3>
@@ -1220,8 +1230,7 @@
                                 Ziyaret Et <i class="fa-solid fa-arrow-right"></i>
                             </a>
                         </div>
-                    </div>
-                `).join('');
+                    </div>`}).join('');
                 document.getElementById('portfolioContainer').innerHTML = portfolioHtml;
 
                 // Load testimonials
