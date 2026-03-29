@@ -546,7 +546,7 @@
         const ADMIN_PASSWORD = 'W%8=n@4é?&#j';
 
         const { createClient } = window.supabase;
-        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+        const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
         // AUTH
         document.getElementById('loginForm').addEventListener('submit', (e) => {
@@ -598,7 +598,7 @@
         }
 
         async function loadSEO() {
-            const { data } = await supabase.from('site_config').select('*').single();
+            const { data } = await db.from('site_config').select('*').single();
             if (data) {
                 document.getElementById('seoTitle').value = data.meta_title || '';
                 document.getElementById('seoDesc').value = data.meta_description || '';
@@ -608,7 +608,7 @@
 
         document.getElementById('seoForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const { error } = await supabase.from('site_config').update({
+            const { error } = await db.from('site_config').update({
                 meta_title: document.getElementById('seoTitle').value,
                 meta_description: document.getElementById('seoDesc').value,
                 meta_keywords: document.getElementById('seoKeywords').value,
@@ -618,7 +618,7 @@
         });
 
         async function loadCampaign() {
-            const { data } = await supabase.from('campaign').select('*').eq('active', true).single();
+            const { data } = await db.from('campaign').select('*').eq('active', true).single();
             if (data) {
                 document.getElementById('campaignTitle').value = data.title || '';
                 document.getElementById('campaignOldPrice').value = data.price_old || '';
@@ -632,7 +632,7 @@
         document.getElementById('campaignForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const features = document.getElementById('campaignFeatures').value.split('\n').filter(f => f.trim());
-            const { error } = await supabase.from('campaign').update({
+            const { error } = await db.from('campaign').update({
                 title: document.getElementById('campaignTitle').value,
                 price_old: parseInt(document.getElementById('campaignOldPrice').value),
                 price_new: parseInt(document.getElementById('campaignNewPrice').value),
@@ -645,7 +645,7 @@
         });
 
         async function loadPackages() {
-            const { data } = await supabase.from('packages').select('*').order('order_index');
+            const { data } = await db.from('packages').select('*').order('order_index');
             const html = data.map(pkg => `
                 <div class="list-item">
                     <div class="list-item-content">
@@ -662,7 +662,7 @@
         }
 
         async function loadServices() {
-            const { data } = await supabase.from('services').select('*').order('order_index');
+            const { data } = await db.from('services').select('*').order('order_index');
             const html = data.map(svc => `
                 <div class="list-item">
                     <div class="list-item-content">
@@ -678,7 +678,7 @@
         }
 
         async function loadPortfolio() {
-            const { data } = await supabase.from('portfolio').select('*').order('order_index');
+            const { data } = await db.from('portfolio').select('*').order('order_index');
             const html = data.map(port => `
                 <div class="list-item">
                     <div class="list-item-content">
@@ -694,7 +694,7 @@
         }
 
         async function loadTestimonials() {
-            const { data } = await supabase.from('testimonials').select('*').eq('active', true).order('order_index');
+            const { data } = await db.from('testimonials').select('*').eq('active', true).order('order_index');
             const html = data.map(test => `
                 <div class="list-item">
                     <div class="list-item-content">
@@ -710,7 +710,7 @@
         }
 
         async function loadExtras() {
-            const { data } = await supabase.from('extra_services').select('*').order('order_index');
+            const { data } = await db.from('extra_services').select('*').order('order_index');
             const html = data.map(ext => `
                 <div class="list-item">
                     <div class="list-item-content">
@@ -744,7 +744,7 @@
 
         async function deletePackage(id) {
             if (confirm('Silmek istediğinize emin misiniz?')) {
-                const { error } = await supabase.from('packages').delete().eq('id', id);
+                const { error } = await db.from('packages').delete().eq('id', id);
                 if (!error) {
                     loadPackages();
                     showStatus('Paket silindi!', true);

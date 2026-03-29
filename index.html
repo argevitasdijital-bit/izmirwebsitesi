@@ -948,7 +948,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script>
         const { createClient } = window.supabase;
-        const supabase = createClient(
+        const db = createClient(
             'https://qprycrbcomnfuevfgxbm.supabase.co',
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwcnljcmJjb21uZnVldmZneGJtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3Njk4MjQsImV4cCI6MjA5MDM0NTgyNH0.o4u7CSDKj42O3ucg36rYIeEF104rc-8c5W3rjH3JqPA'
         );
@@ -1008,13 +1008,13 @@
         async function loadData() {
             try {
                 // Load about
-                const { data: aboutData } = await supabase.from('site_config').select('*').single();
+                const { data: aboutData } = await db.from('site_config').select('*').single();
                 if (aboutData) {
                     document.title = aboutData.meta_title || document.title;
                 }
 
                 // Load services
-                const { data: services } = await supabase.from('services').select('*').order('order_index');
+                const { data: services } = await db.from('services').select('*').order('order_index');
                 const servicesHtml = services.map(s => `
                     <div class="service-card fade-up">
                         <div class="service-icon"><i class="fa-solid ${s.icon}"></i></div>
@@ -1037,7 +1037,7 @@
                 }
 
                 // Load campaign
-                const { data: campaign } = await supabase.from('campaign').select('*').eq('active', true).single();
+                const { data: campaign } = await db.from('campaign').select('*').eq('active', true).single();
                 if (campaign) {
                     const features = JSON.parse(campaign.features || '[]');
                     const featuresList = features.map(f => `<li><i class="fa-solid fa-check"></i> ${f}</li>`).join('');
@@ -1061,7 +1061,7 @@
                 }
 
                 // Load packages
-                const { data: packages } = await supabase.from('packages').select('*').order('order_index');
+                const { data: packages } = await db.from('packages').select('*').order('order_index');
                 const packagesHtml = packages.map(pkg => {
                     const features = JSON.parse(pkg.features || '[]');
                     const featuresList = features.map(f => `<li><i class="fa-solid fa-check"></i> ${f}</li>`).join('');
@@ -1077,7 +1077,7 @@
                 document.getElementById('packagesContainer').innerHTML = packagesHtml;
 
                 // Load extras
-                const { data: extras } = await supabase.from('extra_services').select('*').order('order_index');
+                const { data: extras } = await db.from('extra_services').select('*').order('order_index');
                 const extrasHtml = extras.map(e => `
                     <div class="extra">
                         <div class="extra-icon"><i class="fa-solid ${e.icon}"></i></div>
@@ -1088,7 +1088,7 @@
                 document.getElementById('extrasContainer').innerHTML = extrasHtml;
 
                 // Load portfolio
-                const { data: portfolio } = await supabase.from('portfolio').select('*').order('order_index');
+                const { data: portfolio } = await db.from('portfolio').select('*').order('order_index');
                 const portfolioHtml = portfolio.map(p => `
                     <div class="portfolio-card fade-up">
                         <div class="portfolio-preview"><i class="fa-solid ${p.icon_type}"></i></div>
@@ -1105,7 +1105,7 @@
                 document.getElementById('portfolioContainer').innerHTML = portfolioHtml;
 
                 // Load testimonials
-                const { data: testimonials } = await supabase.from('testimonials').select('*').eq('active', true).order('order_index');
+                const { data: testimonials } = await db.from('testimonials').select('*').eq('active', true).order('order_index');
                 const testimonialsHtml = testimonials.map(t => `
                     <div class="testi fade-up">
                         <div class="testi-stars">${'<i class="fa-solid fa-star"></i>'.repeat(t.rating)}</div>
