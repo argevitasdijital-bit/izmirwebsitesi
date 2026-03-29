@@ -30,9 +30,9 @@
 
         /* ── TABS ── */
         .tabs { display: flex; gap: 6px; margin-bottom: 20px; background: #fff; padding: 10px; border-radius: 16px; overflow-x: auto; box-shadow: 0 4px 20px rgba(0,0,0,.06); border: 1px solid rgba(0,0,0,.06); }
-        .tab-btn { padding: 9px 18px; border: none; background: transparent; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: .84rem; white-space: nowrap; transition: all .2s; color: #8a8580; font-family: inherit; }
+        .tab-btn { padding: 9px 20px; border: none; background: transparent; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: .9rem; white-space: nowrap; transition: all .2s; color: #2d2a26; font-family: inherit; }
         .tab-btn.active { background: #e8734a; color: #fff; }
-        .tab-btn:hover:not(.active) { background: #faf7f4; color: #2d2a26; }
+        .tab-btn:hover:not(.active) { background: #faf7f4; color: #1a1714; }
 
         /* ── CONTENT ── */
         .tab-content { display: none; background: #fff; border-radius: 20px; padding: 32px; box-shadow: 0 4px 20px rgba(0,0,0,.06); border: 1px solid rgba(0,0,0,.06); }
@@ -126,7 +126,7 @@
 <div class="dashboard" id="dashboard">
     <div class="container">
         <div class="top-bar">
-            <h2>İçerik Yönetimi</h2>
+            <h2>Yönetim Paneli</h2>
             <div class="top-bar-right">
                 <a href="/" target="_blank" class="site-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Canlı Siteyi Gör</a>
                 <button class="btn-logout" id="logoutBtn">Çıkış</button>
@@ -136,13 +136,13 @@
         <div class="status-msg" id="statusMsg"></div>
 
         <div class="tabs">
-            <button class="tab-btn active" data-tab="seo">🔍 SEO</button>
-            <button class="tab-btn" data-tab="campaign">🔥 Kampanya</button>
-            <button class="tab-btn" data-tab="packages">📦 Paketler</button>
-            <button class="tab-btn" data-tab="services">⚙️ Hizmetler</button>
-            <button class="tab-btn" data-tab="portfolio">🖼️ Portföy</button>
-            <button class="tab-btn" data-tab="testimonials">💬 Yorumlar</button>
-            <button class="tab-btn" data-tab="extras">➕ Ek Hizmetler</button>
+            <button class="tab-btn active" data-tab="seo">SEO</button>
+            <button class="tab-btn" data-tab="campaign">Kampanya</button>
+            <button class="tab-btn" data-tab="packages">Paketler</button>
+            <button class="tab-btn" data-tab="services">Hizmetler</button>
+            <button class="tab-btn" data-tab="portfolio">Portföy</button>
+            <button class="tab-btn" data-tab="testimonials">Yorumlar</button>
+            <button class="tab-btn" data-tab="extras">Ek Hizmetler</button>
         </div>
 
         <!-- SEO -->
