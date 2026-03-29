@@ -893,6 +893,23 @@
             position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%);
             font-size: .8rem; color: rgba(255,255,255,.5); white-space: nowrap;
         }
+        .lightbox-controls {
+            position: absolute; bottom: -48px; left: 50%; transform: translateX(-50%);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .lb-btn {
+            width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,.2);
+            background: rgba(255,255,255,.08); color: #fff; font-size: .85rem;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: all .2s; backdrop-filter: blur(4px);
+        }
+        .lb-btn:hover { background: #e8734a; border-color: #e8734a; }
+        .lb-zoom-level {
+            font-size: .78rem; color: rgba(255,255,255,.5);
+            min-width: 44px; text-align: center; user-select: none;
+        }
+        .lightbox-inner img { cursor: grab; transition: transform .2s ease; transform-origin: center center; }
+        .lightbox-inner img.grabbing { cursor: grabbing; transition: none; }
 
         @media (max-width: 900px) { .gallery-grid { grid-template-columns: repeat(2,1fr); } }
         @media (max-width: 560px) { .gallery-grid { grid-template-columns: 1fr; } }
@@ -1366,7 +1383,12 @@
         <div class="lightbox-inner">
             <button class="lightbox-close" id="lbClose"><i class="fa-solid fa-xmark"></i></button>
             <img id="lbImg" src="" alt="Tasarım Önizlemesi">
-            <div class="lightbox-label" id="lbLabel"></div>
+            <div class="lightbox-controls">
+                <button class="lb-btn" id="lbZoomOut" title="Uzaklaştır"><i class="fa-solid fa-minus"></i></button>
+                <span class="lb-zoom-level" id="lbZoomLevel">100%</span>
+                <button class="lb-btn" id="lbZoomIn" title="Yakınlaştır"><i class="fa-solid fa-plus"></i></button>
+                <button class="lb-btn" id="lbReset" title="Sıfırla"><i class="fa-solid fa-arrows-rotate"></i></button>
+            </div>
         </div>
     </div>
 
@@ -1443,27 +1465,75 @@
         });
 
         // Lightbox
-        const lb = document.getElementById('lightbox');
-        const lbImg = document.getElementById('lbImg');
-        const lbLabel = document.getElementById('lbLabel');
+        const lb        = document.getElementById('lightbox');
+        const lbImg     = document.getElementById('lbImg');
+        const lbZoomLvl = document.getElementById('lbZoomLevel');
+        let scale = 1, translateX = 0, translateY = 0;
+        let isDragging = false, startX = 0, startY = 0;
 
+        function applyTransform() {
+            lbImg.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
+            lbZoomLvl.textContent = Math.round(scale * 100) + '%';
+        }
+
+        function zoom(delta) {
+            scale = Math.min(4, Math.max(1, scale + delta));
+            if (scale === 1) { translateX = 0; translateY = 0; }
+            applyTransform();
+        }
+
+        function resetZoom() {
+            scale = 1; translateX = 0; translateY = 0;
+            applyTransform();
+        }
+
+        document.getElementById('lbZoomIn').addEventListener('click',  () => zoom(0.5));
+        document.getElementById('lbZoomOut').addEventListener('click', () => zoom(-0.5));
+        document.getElementById('lbReset').addEventListener('click',   resetZoom);
+
+        // Mouse wheel zoom
+        lbImg.addEventListener('wheel', e => {
+            e.preventDefault();
+            zoom(e.deltaY < 0 ? 0.3 : -0.3);
+        }, { passive: false });
+
+        // Drag to pan
+        lbImg.addEventListener('mousedown', e => {
+            if (scale <= 1) return;
+            isDragging = true; startX = e.clientX - translateX; startY = e.clientY - translateY;
+            lbImg.classList.add('grabbing');
+        });
+        window.addEventListener('mousemove', e => {
+            if (!isDragging) return;
+            translateX = e.clientX - startX; translateY = e.clientY - startY;
+            applyTransform();
+        });
+        window.addEventListener('mouseup', () => { isDragging = false; lbImg.classList.remove('grabbing'); });
+
+        // Open
         document.querySelectorAll('.gallery-card[data-img]').forEach(card => {
             card.addEventListener('click', () => {
                 lbImg.src = card.dataset.img;
-                lbLabel.textContent = card.dataset.label || '';
                 lb.classList.add('open');
                 document.body.style.overflow = 'hidden';
+                resetZoom();
             });
         });
 
         document.getElementById('lbClose').addEventListener('click', closeLb);
         lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+        document.addEventListener('keydown', e => {
+            if (!lb.classList.contains('open')) return;
+            if (e.key === 'Escape') closeLb();
+            if (e.key === '+' || e.key === '=') zoom(0.5);
+            if (e.key === '-') zoom(-0.5);
+            if (e.key === '0') resetZoom();
+        });
 
         function closeLb() {
             lb.classList.remove('open');
             document.body.style.overflow = '';
-            setTimeout(() => { lbImg.src = ''; }, 300);
+            setTimeout(() => { lbImg.src = ''; resetZoom(); }, 300);
         }
 
         // Galeri filtresi
