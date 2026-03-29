@@ -132,3 +132,20 @@ VALUES
   ('Bakım & Destek', 'fa-screwdriver-wrench', 'Aylık teknik destek', 1),
   ('Ek Sayfa', 'fa-file-circle-plus', 'İhtiyaca göre ek sayfalar', 2),
   ('E-ticaret Entegrasyonu', 'fa-store', 'Online satış altyapısı', 3);
+
+-- RLS Policies (public read access)
+ALTER TABLE site_config ENABLE ROW LEVEL SECURITY;
+ALTER TABLE campaign ENABLE ROW LEVEL SECURITY;
+ALTER TABLE packages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE services ENABLE ROW LEVEL SECURITY;
+ALTER TABLE portfolio ENABLE ROW LEVEL SECURITY;
+ALTER TABLE testimonials ENABLE ROW LEVEL SECURITY;
+ALTER TABLE extra_services ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Public read" ON site_config FOR SELECT USING (true);
+CREATE POLICY "Public read" ON campaign FOR SELECT USING (true);
+CREATE POLICY "Public read" ON packages FOR SELECT USING (true);
+CREATE POLICY "Public read" ON services FOR SELECT USING (true);
+CREATE POLICY "Public read" ON portfolio FOR SELECT USING (true);
+CREATE POLICY "Public read" ON testimonials FOR SELECT USING (true);
+CREATE POLICY "Public read" ON extra_services FOR SELECT USING (true);
