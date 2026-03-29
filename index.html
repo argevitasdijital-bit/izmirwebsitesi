@@ -1392,12 +1392,14 @@
         let isDragging = false, startX = 0, startY = 0;
 
         function applyTransform() {
-            lbImg.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
+            // translate önce, scale sonra → koordinatlar doğru kalır
+            lbImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
             lbZoomLvl.textContent = Math.round(scale * 100) + '%';
+            lbImg.style.cursor = scale > 1 ? 'grab' : 'default';
         }
 
         function zoom(delta) {
-            scale = Math.min(4, Math.max(1, scale + delta));
+            scale = Math.min(4, Math.max(1, parseFloat((scale + delta).toFixed(1))));
             if (scale === 1) { translateX = 0; translateY = 0; }
             applyTransform();
         }
@@ -1414,21 +1416,51 @@
         // Mouse wheel zoom
         lbImg.addEventListener('wheel', e => {
             e.preventDefault();
-            zoom(e.deltaY < 0 ? 0.3 : -0.3);
+            zoom(e.deltaY < 0 ? 0.25 : -0.25);
         }, { passive: false });
 
-        // Drag to pan
+        // Drag to pan — mouse
         lbImg.addEventListener('mousedown', e => {
             if (scale <= 1) return;
-            isDragging = true; startX = e.clientX - translateX; startY = e.clientY - translateY;
-            lbImg.classList.add('grabbing');
+            e.preventDefault();
+            isDragging = true;
+            startX = e.clientX - translateX;
+            startY = e.clientY - translateY;
+            lbImg.style.cursor = 'grabbing';
+            lbImg.style.transition = 'none';
         });
         window.addEventListener('mousemove', e => {
             if (!isDragging) return;
-            translateX = e.clientX - startX; translateY = e.clientY - startY;
-            applyTransform();
+            translateX = e.clientX - startX;
+            translateY = e.clientY - startY;
+            lbImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
         });
-        window.addEventListener('mouseup', () => { isDragging = false; lbImg.classList.remove('grabbing'); });
+        window.addEventListener('mouseup', () => {
+            if (!isDragging) return;
+            isDragging = false;
+            lbImg.style.cursor = 'grab';
+            lbImg.style.transition = 'transform .2s ease';
+        });
+
+        // Touch desteği (mobil)
+        let touchStartX = 0, touchStartY = 0;
+        lbImg.addEventListener('touchstart', e => {
+            if (scale <= 1 || e.touches.length !== 1) return;
+            e.preventDefault();
+            touchStartX = e.touches[0].clientX - translateX;
+            touchStartY = e.touches[0].clientY - translateY;
+            lbImg.style.transition = 'none';
+        }, { passive: false });
+        lbImg.addEventListener('touchmove', e => {
+            if (scale <= 1 || e.touches.length !== 1) return;
+            e.preventDefault();
+            translateX = e.touches[0].clientX - touchStartX;
+            translateY = e.touches[0].clientY - touchStartY;
+            lbImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+        }, { passive: false });
+        lbImg.addEventListener('touchend', () => {
+            lbImg.style.transition = 'transform .2s ease';
+        });
 
         // Open
         document.querySelectorAll('.gallery-card[data-img]').forEach(card => {
