@@ -14,9 +14,9 @@
             --bg2:       #edeae4;
             --surface:   #ffffff;
             --border:    rgba(0,0,0,0.08);
-            --gold:      #b8832e;
-            --gold-lt:   #cc9a40;
-            --gold-pale: rgba(184,131,46,0.1);
+            --accent:    #1a5c5c;
+            --accent-lt: #236e6e;
+            --accent-pale: rgba(26,92,92,0.08);
             --dark:      #0c1018;
             --mid:       #3a3d45;
             --muted:     #8a8d97;
@@ -34,7 +34,7 @@
 
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
 
         /* ── NAV ── */
         nav {
@@ -53,14 +53,14 @@
             font-family: 'Satoshi', sans-serif;
             font-weight: 800; font-size: 1.3rem; color: var(--dark); letter-spacing: -.5px;
         }
-        .nav-logo span { color: var(--gold); }
+        .nav-logo span { color: var(--accent); }
         .nav-links { display: flex; gap: 40px; list-style: none; }
         .nav-links a {
             color: var(--muted); text-decoration: none;
             font-size: .85rem; font-weight: 500; letter-spacing: .2px;
             transition: color .2s; display: flex; align-items: center; gap: 6px;
         }
-        .nav-links a::before { content: '·'; color: var(--gold); font-size: .9rem; }
+        .nav-links a::before { content: '·'; color: var(--accent); font-size: .9rem; }
         .nav-links a:hover { color: var(--dark); }
         .nav-cta {
             padding: 11px 26px; border: 1.5px solid var(--dark); border-radius: 50px;
@@ -78,15 +78,7 @@
             grid-template-rows: 1fr auto;
             position: relative; overflow: hidden;
         }
-        .hero::before {
-            content: '';
-            position: absolute; inset: 0;
-            background-image:
-                linear-gradient(to right, var(--line) 1px, transparent 1px),
-                linear-gradient(to bottom, var(--line) 1px, transparent 1px);
-            background-size: calc(100%/3) 100px;
-            pointer-events: none; z-index: 0;
-        }
+        .hero::before { display: none; }
 
         /* Sol */
         .hero-left {
@@ -117,11 +109,11 @@
         }
         .hero-headline .ln4 {
             font-size: clamp(3.2rem, 5.5vw, 5.4rem);
-            font-weight: 700; color: var(--gold);
+            font-weight: 700; color: var(--accent);
             display: block; line-height: 1.05; letter-spacing: -1px;
         }
-        .hero-bottom-left { display: flex; flex-direction: column; gap: 22px; }
-        .hero-desc { font-size: .88rem; color: var(--muted); line-height: 1.8; max-width: 290px; }
+        .hero-bottom-left { display: flex; flex-direction: column; gap: 28px; margin-top: 20px; }
+        .hero-desc { font-size: .9rem; color: var(--muted); line-height: 1.8; max-width: 290px; }
         .hero-btn {
             display: inline-flex; align-items: center; gap: 10px;
             background: var(--dark); color: #fff;
@@ -129,7 +121,7 @@
             font-family: 'Satoshi', sans-serif; font-weight: 700; font-size: .86rem;
             text-decoration: none; width: fit-content; transition: all .3s;
         }
-        .hero-btn:hover { background: var(--gold); transform: translateY(-2px); }
+        .hero-btn:hover { background: var(--accent); transform: translateY(-2px); }
 
         /* Orta */
         .hero-center {
@@ -138,6 +130,7 @@
             padding: 120px 20px 60px;
             border-right: 1px solid var(--border);
             position: relative; z-index: 1;
+            background: linear-gradient(160deg, rgba(26,92,92,.06) 0%, transparent 60%);
         }
         .tooth-visual {
             position: relative; display: flex;
@@ -146,16 +139,16 @@
         }
         .tooth-glow-outer {
             position: absolute; width: 300px; height: 300px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(184,131,46,.13) 0%, transparent 68%);
+            background: radial-gradient(circle, rgba(26,92,92,.12) 0%, transparent 68%);
             animation: pulse 3.5s ease-in-out infinite;
         }
         .tooth-glow-mid {
             position: absolute; width: 180px; height: 180px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(184,131,46,.2) 0%, transparent 68%);
+            background: radial-gradient(circle, rgba(26,92,92,.18) 0%, transparent 68%);
         }
         .tooth-icon {
-            font-size: 130px; color: var(--gold);
-            filter: drop-shadow(0 8px 32px rgba(184,131,46,.3));
+            font-size: 130px; color: #ffffff;
+            filter: drop-shadow(0 8px 40px rgba(26,92,92,.35)) drop-shadow(0 0 20px rgba(255,255,255,.4));
             animation: float 4.5s ease-in-out infinite;
             position: relative; z-index: 1;
         }
@@ -175,7 +168,7 @@
         .hero-right-label {
             font-family: 'Satoshi', sans-serif;
             font-size: .7rem; letter-spacing: 2.5px;
-            text-transform: uppercase; color: var(--gold); margin-bottom: 10px;
+            text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
         }
         .hero-right-desc { font-size: .87rem; color: var(--muted); line-height: 1.8; }
         .doctor-cards { display: flex; flex-direction: column; gap: 10px; }
@@ -186,7 +179,7 @@
             cursor: pointer; transition: all .3s;
             box-shadow: 0 2px 8px rgba(0,0,0,.04);
         }
-        .doc-card:hover { border-color: var(--gold); transform: translateX(4px); box-shadow: 0 4px 16px rgba(0,0,0,.08); }
+        .doc-card:hover { border-color: var(--accent); transform: translateX(4px); box-shadow: 0 4px 16px rgba(0,0,0,.08); }
         .doc-av {
             width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
             display: flex; align-items: center; justify-content: center;
@@ -223,14 +216,14 @@
         .sec-label {
             font-family: 'Satoshi', sans-serif;
             font-size: .7rem; letter-spacing: 3px; text-transform: uppercase;
-            color: var(--gold); margin-bottom: 14px;
+            color: var(--accent); margin-bottom: 14px;
         }
         .sec-title {
             font-family: 'Satoshi', sans-serif;
             font-size: clamp(2.2rem, 3.8vw, 3.4rem);
             font-weight: 800; color: var(--dark); line-height: 1.1;
         }
-        .sec-title em { font-style: normal; color: var(--gold); font-weight: 400; }
+        .sec-title em { font-style: normal; color: var(--accent); font-weight: 400; }
 
         /* ── SERVICES ── */
         .services { background: var(--surface); }
@@ -241,26 +234,26 @@
             border: 1px solid var(--border); border-radius: 24px; overflow: hidden;
         }
         .svc-card {
-            background: #fff; padding: 36px 30px;
+            background: #fff; padding: 40px 34px;
             transition: all .35s; cursor: default; position: relative; overflow: hidden;
         }
         .svc-card::after {
             content: ''; position: absolute;
             bottom: 0; left: 0; right: 0; height: 2px;
-            background: var(--gold); transform: scaleX(0); transition: transform .35s;
+            background: var(--accent); transform: scaleX(0); transition: transform .35s;
         }
         .svc-card:hover { background: #fdf9f4; }
         .svc-card:hover::after { transform: scaleX(1); }
         .svc-num {
             font-family: 'Satoshi', sans-serif;
-            font-size: .67rem; color: var(--muted); letter-spacing: 2px; margin-bottom: 24px;
+            font-size: .7rem; color: var(--accent); letter-spacing: 2px; margin-bottom: 28px; font-weight: 700;
         }
-        .svc-icon { font-size: 1.8rem; color: var(--gold); margin-bottom: 18px; }
+        .svc-icon { font-size: 2.2rem; color: var(--accent); margin-bottom: 20px; }
         .svc-name {
             font-family: 'Satoshi', sans-serif;
-            font-size: .97rem; font-weight: 700; color: var(--dark); margin-bottom: 10px;
+            font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: 12px;
         }
-        .svc-desc { font-size: .83rem; color: var(--muted); line-height: 1.75; }
+        .svc-desc { font-size: .92rem; color: var(--mid); line-height: 1.8; }
 
         /* ── WHY ── */
         .why { background: var(--bg); }
@@ -275,21 +268,21 @@
         .why-visual::before {
             content: ''; position: absolute; top: -80px; right: -80px;
             width: 280px; height: 280px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(184,131,46,.2), transparent 70%);
+            background: radial-gradient(circle, rgba(26,92,92,.18), transparent 70%);
         }
         .why-big-num {
             font-family: 'Satoshi', sans-serif;
             font-size: 9rem; font-weight: 800; color: #fff; line-height: 1;
             position: relative; z-index: 1;
         }
-        .why-big-num span { color: var(--gold); }
+        .why-big-num span { color: var(--accent); }
         .why-big-label {
             font-size: .9rem; color: rgba(255,255,255,.5);
             text-align: center; line-height: 1.6; position: relative; z-index: 1;
         }
         .why-badge {
             position: absolute; bottom: 24px; right: 24px;
-            background: var(--gold); color: #fff;
+            background: var(--accent); color: #fff;
             padding: 8px 18px; border-radius: 50px;
             font-family: 'Satoshi', sans-serif; font-size: .74rem; font-weight: 700;
         }
@@ -297,9 +290,9 @@
         .why-point { display: flex; gap: 20px; align-items: flex-start; }
         .why-point-icon {
             width: 48px; height: 48px; flex-shrink: 0;
-            background: var(--gold-pale); border-radius: 12px;
+            background: var(--accent-pale); border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
-            color: var(--gold); font-size: 1rem;
+            color: var(--accent); font-size: 1rem;
         }
         .why-point h4 {
             font-family: 'Satoshi', sans-serif;
@@ -314,7 +307,7 @@
             background: var(--bg); border: 1px solid var(--border);
             border-radius: 24px; overflow: hidden; transition: all .4s;
         }
-        .team-card:hover { border-color: var(--gold); transform: translateY(-8px); box-shadow: 0 16px 40px rgba(0,0,0,.08); }
+        .team-card:hover { border-color: var(--accent); transform: translateY(-8px); box-shadow: 0 16px 40px rgba(0,0,0,.08); }
         .team-photo {
             height: 200px; display: flex; align-items: center; justify-content: center;
             font-family: 'Satoshi', sans-serif; font-size: 4rem; font-weight: 800;
@@ -325,7 +318,7 @@
         .tp3 { background: linear-gradient(135deg,#4a2a1a,#2a160c); }
         .team-info { padding: 24px 26px; }
         .team-name { font-family: 'Satoshi', sans-serif; font-size: 1rem; font-weight: 800; color: var(--dark); }
-        .team-title { font-size: .79rem; color: var(--gold); font-weight: 600; margin: 5px 0 12px; }
+        .team-title { font-size: .79rem; color: var(--accent); font-weight: 600; margin: 5px 0 12px; }
         .team-bio { font-size: .83rem; color: var(--muted); line-height: 1.75; }
 
         /* ── APPOINTMENT ── */
@@ -334,7 +327,7 @@
         .apt-info p { color: var(--muted); line-height: 1.8; margin-top: 20px; margin-bottom: 36px; font-size: .9rem; }
         .contact-list { display: flex; flex-direction: column; gap: 14px; }
         .contact-row { display: flex; align-items: flex-start; gap: 14px; font-size: .87rem; color: var(--mid); }
-        .contact-row i { color: var(--gold); width: 16px; margin-top: 3px; flex-shrink: 0; }
+        .contact-row i { color: var(--accent); width: 16px; margin-top: 3px; flex-shrink: 0; }
         .apt-form { display: flex; flex-direction: column; gap: 12px; }
         .apt-form input, .apt-form select, .apt-form textarea {
             background: var(--surface); border: 1.5px solid var(--border);
@@ -344,8 +337,8 @@
         }
         .apt-form input::placeholder, .apt-form textarea::placeholder { color: var(--muted); }
         .apt-form input:focus, .apt-form select:focus, .apt-form textarea:focus {
-            outline: none; border-color: var(--gold);
-            box-shadow: 0 0 0 3px rgba(184,131,46,.1);
+            outline: none; border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(26,92,92,.1);
         }
         .apt-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .apt-submit {
@@ -355,15 +348,15 @@
             display: flex; align-items: center; justify-content: center; gap: 8px;
             margin-top: 4px;
         }
-        .apt-submit:hover { background: var(--gold); transform: translateY(-2px); }
+        .apt-submit:hover { background: var(--accent); transform: translateY(-2px); }
 
         /* ── FOOTER ── */
         footer { background: var(--dark); padding: 36px 0; }
         .footer-inner { display: flex; justify-content: space-between; align-items: center; }
         .footer-logo { font-family: 'Satoshi', sans-serif; font-weight: 800; font-size: 1.1rem; color: #fff; }
-        .footer-logo span { color: var(--gold); }
+        .footer-logo span { color: var(--accent); }
         .footer-mid { font-size: .78rem; color: rgba(255,255,255,.4); text-align: center; line-height: 1.7; }
-        .footer-mid strong { color: var(--gold); }
+        .footer-mid strong { color: var(--accent); }
         .footer-right { text-align: right; }
         .footer-time {
             font-family: 'Satoshi', sans-serif;
