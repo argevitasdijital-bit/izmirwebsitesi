@@ -755,6 +755,114 @@
             .footer-nav { justify-content: center; flex-wrap: wrap; }
             .footer-bottom { flex-direction: column; text-align: center; }
         }
+
+        /* ── STİL GALERİSİ ── */
+        .style-gallery { background: #fff; }
+        .gallery-filters {
+            display: flex; gap: 10px; justify-content: center;
+            flex-wrap: wrap; margin-bottom: 48px;
+        }
+        .gf-btn {
+            padding: 9px 20px; border-radius: 50px;
+            border: 1.5px solid #e8e3de; background: transparent;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: .84rem; font-weight: 600; color: #8a8580;
+            cursor: pointer; transition: all .25s;
+        }
+        .gf-btn:hover { border-color: #e8734a; color: #e8734a; }
+        .gf-btn.active { background: #e8734a; border-color: #e8734a; color: #fff; }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .gallery-card {
+            border-radius: 20px; overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,.07);
+            transition: all .35s; cursor: pointer;
+            position: relative;
+        }
+        .gallery-card:hover { transform: translateY(-6px); box-shadow: 0 12px 36px rgba(0,0,0,.13); }
+        .gallery-card[data-cat]:not(.visible) { display: none; }
+        .gallery-card.visible { display: block; }
+
+        .gc-visual {
+            height: 240px; position: relative; overflow: hidden;
+            display: flex; align-items: flex-start; justify-content: flex-start; padding: 20px;
+        }
+        /* Her kategoriye özel renk */
+        .gc-visual.restoran  { background: linear-gradient(135deg,#1a0a05 0%,#3d1a08 40%,#7a3a10 100%); }
+        .gc-visual.otel      { background: linear-gradient(135deg,#050d18 0%,#0d2240 40%,#1a4a7a 100%); }
+        .gc-visual.saglik    { background: linear-gradient(135deg,#031210 0%,#0a2e2a 40%,#145450 100%); }
+        .gc-visual.guzellik  { background: linear-gradient(135deg,#180510 0%,#3d1030 40%,#7a2060 100%); }
+        .gc-visual.hukuk     { background: linear-gradient(135deg,#0d0a02 0%,#2a2208 40%,#5a4a10 100%); }
+
+        /* Mini tarayıcı çerçevesi */
+        .gc-browser {
+            width: 100%; background: rgba(255,255,255,.07);
+            border-radius: 10px; border: 1px solid rgba(255,255,255,.12);
+            overflow: hidden; position: absolute;
+            bottom: -20px; left: 50%; transform: translateX(-50%);
+            width: calc(100% - 32px);
+        }
+        .gc-browser-bar {
+            background: rgba(255,255,255,.1); padding: 7px 10px;
+            display: flex; align-items: center; gap: 5px;
+        }
+        .gc-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.3); }
+        .gc-url {
+            flex: 1; background: rgba(255,255,255,.08);
+            border-radius: 4px; height: 14px; margin: 0 8px;
+        }
+        .gc-content { padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+        .gc-hero-bar {
+            height: 52px; border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: .55rem; font-weight: 700; color: rgba(255,255,255,.5);
+            letter-spacing: 1px; text-transform: uppercase;
+        }
+        .gc-rows { display: flex; flex-direction: column; gap: 5px; }
+        .gc-row { height: 7px; border-radius: 3px; background: rgba(255,255,255,.08); }
+        .gc-row.short { width: 60%; }
+        .gc-cards { display: flex; gap: 5px; margin-top: 2px; }
+        .gc-mini-card {
+            flex: 1; height: 32px; border-radius: 5px;
+            background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08);
+        }
+
+        /* Renk varyantları hero bar */
+        .gc-visual.restoran  .gc-hero-bar { background: rgba(232,115,74,.25); color: rgba(232,115,74,.7); }
+        .gc-visual.otel      .gc-hero-bar { background: rgba(74,130,230,.2); color: rgba(120,170,255,.6); }
+        .gc-visual.saglik    .gc-hero-bar { background: rgba(26,150,140,.2); color: rgba(80,200,190,.6); }
+        .gc-visual.guzellik  .gc-hero-bar { background: rgba(200,80,140,.2); color: rgba(240,140,190,.6); }
+        .gc-visual.hukuk     .gc-hero-bar { background: rgba(180,150,50,.2); color: rgba(220,190,100,.6); }
+
+        .gc-info { padding: 20px 22px 22px; background: #fff; }
+        .gc-cat {
+            display: inline-block; font-size: .72rem; font-weight: 700;
+            padding: 4px 12px; border-radius: 50px; margin-bottom: 10px;
+        }
+        .gc-cat.restoran { background: #fff3ee; color: #e8734a; }
+        .gc-cat.otel     { background: #eef4ff; color: #2a6ad4; }
+        .gc-cat.saglik   { background: #eef8f6; color: #1a7a70; }
+        .gc-cat.guzellik { background: #fceef8; color: #b0406a; }
+        .gc-cat.hukuk    { background: #fdf8ee; color: #8a6a10; }
+
+        .gc-title { font-size: 1rem; font-weight: 800; color: #2d2a26; margin-bottom: 5px; }
+        .gc-desc  { font-size: .82rem; color: #8a8580; line-height: 1.6; }
+        .gc-arrow {
+            position: absolute; top: 18px; right: 18px;
+            width: 34px; height: 34px; border-radius: 50%;
+            background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: .8rem; transition: all .3s;
+            backdrop-filter: blur(4px);
+        }
+        .gallery-card:hover .gc-arrow { background: #e8734a; border-color: #e8734a; }
+
+        @media (max-width: 900px) { .gallery-grid { grid-template-columns: repeat(2,1fr); } }
+        @media (max-width: 560px) { .gallery-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -949,6 +1057,210 @@
         </div>
     </section>
 
+    <!-- STİL GALERİSİ -->
+    <section class="style-gallery" id="stil-galerisi">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag fade-up"><i class="fa-solid fa-palette"></i> Tasarım Tarzımız</div>
+                <h2 class="section-title fade-up">Her Sektöre Özel<br>Tasarım Anlayışı</h2>
+                <p class="section-desc fade-up">Müşterilerimizin işine ve hedef kitlesine uygun, özgün tasarımlar üretiyoruz</p>
+            </div>
+
+            <div class="gallery-filters fade-up">
+                <button class="gf-btn active" data-filter="all">Tümü</button>
+                <button class="gf-btn" data-filter="restoran">Restoran & Kafe</button>
+                <button class="gf-btn" data-filter="otel">Otel & Turizm</button>
+                <button class="gf-btn" data-filter="saglik">Sağlık & Klinik</button>
+                <button class="gf-btn" data-filter="guzellik">Güzellik & Kuaför</button>
+                <button class="gf-btn" data-filter="hukuk">Hukuk & Danışmanlık</button>
+            </div>
+
+            <div class="gallery-grid">
+
+                <!-- Restoran 1 -->
+                <div class="gallery-card visible" data-cat="restoran">
+                    <div class="gc-visual restoran">
+                        <div class="gc-arrow"><i class="fa-solid fa-arrow-up-right"></i></div>
+                        <div class="gc-browser">
+                            <div class="gc-browser-bar">
+                                <div class="gc-dot"></div><div class="gc-dot"></div><div class="gc-dot"></div>
+                                <div class="gc-url"></div>
+                            </div>
+                            <div class="gc-content">
+                                <div class="gc-hero-bar">Lezzetin Adresi</div>
+                                <div class="gc-rows">
+                                    <div class="gc-row"></div>
+                                    <div class="gc-row short"></div>
+                                </div>
+                                <div class="gc-cards">
+                                    <div class="gc-mini-card"></div>
+                                    <div class="gc-mini-card"></div>
+                                    <div class="gc-mini-card"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gc-info">
+                        <span class="gc-cat restoran">Restoran & Kafe</span>
+                        <div class="gc-title">Sıcak & Davetkar Tarz</div>
+                        <div class="gc-desc">Menü, rezervasyon ve atmosferi ön plana çıkaran, iştah açan tasarımlar</div>
+                    </div>
+                </div>
+
+                <!-- Otel 1 -->
+                <div class="gallery-card visible" data-cat="otel">
+                    <div class="gc-visual otel">
+                        <div class="gc-arrow"><i class="fa-solid fa-arrow-up-right"></i></div>
+                        <div class="gc-browser">
+                            <div class="gc-browser-bar">
+                                <div class="gc-dot"></div><div class="gc-dot"></div><div class="gc-dot"></div>
+                                <div class="gc-url"></div>
+                            </div>
+                            <div class="gc-content">
+                                <div class="gc-hero-bar">Premium Stay</div>
+                                <div class="gc-rows">
+                                    <div class="gc-row"></div>
+                                    <div class="gc-row short"></div>
+                                </div>
+                                <div class="gc-cards">
+                                    <div class="gc-mini-card"></div>
+                                    <div class="gc-mini-card"></div>
+                                    <div class="gc-mini-card"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gc-info">
+                        <span class="gc-cat otel">Otel & Turizm</span>
+                        <div class="gc-title">Lüks & Minimal Tarz</div>
+                        <div class="gc-desc">Rezervasyon sistemi entegrasyonu ile doluluk oranını artıran premium tasarımlar</div>
+                    </div>
+                </div>
+
+                <!-- Sağlık 1 -->
+                <div class="gallery-card visible" data-cat="saglik">
+                    <div class="gc-visual saglik">
+                        <div class="gc-arrow"><i class="fa-solid fa-arrow-up-right"></i></div>
+                        <div class="gc-browser">
+                            <div class="gc-browser-bar">
+                                <div class="gc-dot"></div><div class="gc-dot"></div><div class="gc-dot"></div>
+                                <div class="gc-url"></div>
+                            </div>
+                            <div class="gc-content">
+                                <div class="gc-hero-bar">Modern Klinik</div>
+                                <div class="gc-rows">
+                                    <div class="gc-row"></div>
+                                    <div class="gc-row short"></div>
+                                </div>
+                                <div class="gc-cards">
+                                    <div class="gc-mini-card"></div>
+                                    <div class="gc-mini-card"></div>
+                                    <div class="gc-mini-card"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gc-info">
+                        <span class="gc-cat saglik">Sağlık & Klinik</span>
+                        <div class="gc-title">Güven Veren & Modern Tarz</div>
+                        <div class="gc-desc">Online randevu, ekip tanıtımı ve hizmet bilgisiyle hasta güveni inşa eden tasarımlar</div>
+                    </div>
+                </div>
+
+                <!-- Güzellik 1 -->
+                <div class="gallery-card visible" data-cat="guzellik">
+                    <div class="gc-visual guzellik">
+                        <div class="gc-arrow"><i class="fa-solid fa-arrow-up-right"></i></div>
+                        <div class="gc-browser">
+                            <div class="gc-browser-bar">
+                                <div class="gc-dot"></div><div class="gc-dot"></div><div class="gc-dot"></div>
+                                <div class="gc-url"></div>
+                            </div>
+                            <div class="gc-content">
+                                <div class="gc-hero-bar">Beauty Studio</div>
+                                <div class="gc-rows">
+                                    <div class="gc-row"></div>
+                                    <div class="gc-row short"></div>
+                                </div>
+                                <div class="gc-cards">
+                                    <div class="gc-mini-card"></div>
+                                    <div class="gc-mini-card"></div>
+                                    <div class="gc-mini-card"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gc-info">
+                        <span class="gc-cat guzellik">Güzellik & Kuaför</span>
+                        <div class="gc-title">Şık & Kadınsı Tarz</div>
+                        <div class="gc-desc">Hizmet galerisi, online randevu ve fiyat listesiyle doluluk oranını artıran tasarımlar</div>
+                    </div>
+                </div>
+
+                <!-- Hukuk 1 -->
+                <div class="gallery-card visible" data-cat="hukuk">
+                    <div class="gc-visual hukuk">
+                        <div class="gc-arrow"><i class="fa-solid fa-arrow-up-right"></i></div>
+                        <div class="gc-browser">
+                            <div class="gc-browser-bar">
+                                <div class="gc-dot"></div><div class="gc-dot"></div><div class="gc-dot"></div>
+                                <div class="gc-url"></div>
+                            </div>
+                            <div class="gc-content">
+                                <div class="gc-hero-bar">Hukuk Bürosu</div>
+                                <div class="gc-rows">
+                                    <div class="gc-row"></div>
+                                    <div class="gc-row short"></div>
+                                </div>
+                                <div class="gc-cards">
+                                    <div class="gc-mini-card"></div>
+                                    <div class="gc-mini-card"></div>
+                                    <div class="gc-mini-card"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gc-info">
+                        <span class="gc-cat hukuk">Hukuk & Danışmanlık</span>
+                        <div class="gc-title">Kurumsal & Güvenilir Tarz</div>
+                        <div class="gc-desc">Uzmanlık alanları, avukat kadrosu ve iletişim formuyla otorite kuran tasarımlar</div>
+                    </div>
+                </div>
+
+                <!-- Restoran 2 -->
+                <div class="gallery-card visible" data-cat="restoran">
+                    <div class="gc-visual restoran">
+                        <div class="gc-arrow"><i class="fa-solid fa-arrow-up-right"></i></div>
+                        <div class="gc-browser">
+                            <div class="gc-browser-bar">
+                                <div class="gc-dot"></div><div class="gc-dot"></div><div class="gc-dot"></div>
+                                <div class="gc-url"></div>
+                            </div>
+                            <div class="gc-content">
+                                <div class="gc-hero-bar">Fine Dining</div>
+                                <div class="gc-rows">
+                                    <div class="gc-row"></div>
+                                    <div class="gc-row short"></div>
+                                </div>
+                                <div class="gc-cards">
+                                    <div class="gc-mini-card"></div>
+                                    <div class="gc-mini-card"></div>
+                                    <div class="gc-mini-card"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gc-info">
+                        <span class="gc-cat restoran">Restoran & Kafe</span>
+                        <div class="gc-title">Fine Dining & Butik Tarz</div>
+                        <div class="gc-desc">Lüks restoran kimliğine uygun, sofistike renk paleti ve editorial tipografiyle tasarımlar</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
     <!-- TESTIMONIALS -->
     <section class="testimonials" id="yorumlar">
         <div class="container">
@@ -1101,6 +1413,19 @@
             navItems.forEach(a => {
                 a.classList.remove('active');
                 if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+            });
+        });
+
+        // Galeri filtresi
+        document.querySelectorAll('.gf-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.gf-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.dataset.filter;
+                document.querySelectorAll('.gallery-card').forEach(card => {
+                    const show = filter === 'all' || card.dataset.cat === filter;
+                    card.classList.toggle('visible', show);
+                });
             });
         });
 
