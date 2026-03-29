@@ -5,768 +5,819 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>İzmir Websitesi - Admin Panel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body {
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #f6f1ec;
-            color: #2d2a26;
-            line-height: 1.6;
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f6f1ec; color: #2d2a26; line-height: 1.6; }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
-        /* Login Screen */
-        .login-screen {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #f6f1ec 0%, #faf7f4 100%);
-        }
+        /* ── LOGIN ── */
+        .login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .login-box { background: #fff; border-radius: 28px; padding: 48px; width: 100%; max-width: 400px; box-shadow: 0 12px 40px rgba(0,0,0,.08); border: 1px solid rgba(0,0,0,.06); }
+        .login-box h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 8px; }
+        .login-box p { color: #8a8580; margin-bottom: 32px; font-size: .9rem; }
+        .login-error { color: #dc2626; font-size: .85rem; margin-top: 12px; display: none; }
 
-        .login-box {
-            background: #fff;
-            border-radius: 28px;
-            padding: 48px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
-            border: 1px solid rgba(0,0,0,0.06);
-        }
-
-        .login-box h1 {
-            font-size: 1.8rem;
-            font-weight: 800;
-            margin-bottom: 8px;
-            color: #2d2a26;
-        }
-
-        .login-box p {
-            color: #8a8580;
-            margin-bottom: 32px;
-            font-size: 0.9rem;
-        }
-
-        .fg {
-            margin-bottom: 20px;
-        }
-
-        .fg label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: #2d2a26;
-            margin-bottom: 6px;
-        }
-
-        .fg input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1.5px solid #e8e3de;
-            border-radius: 12px;
-            font-size: 0.95rem;
-            font-family: inherit;
-            transition: all 0.25s;
-        }
-
-        .fg input:focus {
-            outline: none;
-            border-color: #e8734a;
-            box-shadow: 0 0 0 4px rgba(232,115,74,0.1);
-        }
-
-        .btn-login {
-            width: 100%;
-            padding: 14px;
-            background: #e8734a;
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            font-family: inherit;
-            transition: all 0.25s;
-        }
-
-        .btn-login:hover {
-            background: #d45a32;
-            transform: translateY(-1px);
-        }
-
-        .login-error {
-            color: #dc2626;
-            font-size: 0.85rem;
-            margin-top: 16px;
-            text-align: center;
-            display: none;
-        }
-
-        /* Dashboard */
-        .dashboard {
-            display: none;
-            min-height: 100vh;
-            padding: 24px 0;
-        }
-
+        /* ── DASHBOARD ── */
+        .dashboard { display: none; min-height: 100vh; padding: 24px 0; }
         .dashboard.show { display: block; }
 
-        .header {
-            background: #fff;
-            border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid rgba(0,0,0,0.06);
-        }
+        .top-bar { background: #fff; border-radius: 20px; padding: 20px 28px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,.06); border: 1px solid rgba(0,0,0,.06); }
+        .top-bar h2 { font-size: 1.3rem; font-weight: 800; }
+        .top-bar-right { display: flex; align-items: center; gap: 12px; }
+        .site-link { font-size: .85rem; color: #e8734a; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+        .site-link:hover { text-decoration: underline; }
 
-        .header h2 {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: #2d2a26;
-        }
+        /* ── TABS ── */
+        .tabs { display: flex; gap: 6px; margin-bottom: 20px; background: #fff; padding: 10px; border-radius: 16px; overflow-x: auto; box-shadow: 0 4px 20px rgba(0,0,0,.06); border: 1px solid rgba(0,0,0,.06); }
+        .tab-btn { padding: 9px 18px; border: none; background: transparent; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: .84rem; white-space: nowrap; transition: all .2s; color: #8a8580; font-family: inherit; }
+        .tab-btn.active { background: #e8734a; color: #fff; }
+        .tab-btn:hover:not(.active) { background: #faf7f4; color: #2d2a26; }
 
-        .logout-btn {
-            background: #dc2626;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: all 0.25s;
-        }
-
-        .logout-btn:hover {
-            background: #b91c1c;
-        }
-
-        /* Tabs */
-        .tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 24px;
-            background: #fff;
-            padding: 12px;
-            border-radius: 20px;
-            overflow-x: auto;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-            border: 1px solid rgba(0,0,0,0.06);
-        }
-
-        .tab-btn {
-            padding: 10px 20px;
-            border: none;
-            background: transparent;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
-            white-space: nowrap;
-            transition: all 0.25s;
-            color: #8a8580;
-            font-family: inherit;
-        }
-
-        .tab-btn.active {
-            background: #e8734a;
-            color: #fff;
-        }
-
-        .tab-btn:hover:not(.active) {
-            background: #faf7f4;
-        }
-
-        .tab-content {
-            display: none;
-            background: #fff;
-            border-radius: 20px;
-            padding: 32px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-            border: 1px solid rgba(0,0,0,0.06);
-        }
-
+        /* ── CONTENT ── */
+        .tab-content { display: none; background: #fff; border-radius: 20px; padding: 32px; box-shadow: 0 4px 20px rgba(0,0,0,.06); border: 1px solid rgba(0,0,0,.06); }
         .tab-content.active { display: block; }
+        .tab-content h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 24px; }
 
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            margin-bottom: 24px;
+        /* ── FORM ELEMENTS ── */
+        .fg { margin-bottom: 16px; }
+        .fg label { display: block; font-size: .84rem; font-weight: 700; margin-bottom: 6px; }
+        .fg input, .fg textarea, .fg select {
+            width: 100%; padding: 11px 14px; border: 1.5px solid #e8e3de; border-radius: 10px;
+            font-size: .93rem; font-family: inherit; transition: all .2s; background: #faf7f4; color: #2d2a26;
         }
+        .fg input:focus, .fg textarea:focus, .fg select:focus { outline: none; border-color: #e8734a; box-shadow: 0 0 0 3px rgba(232,115,74,.1); background: #fff; }
+        .fg textarea { resize: vertical; min-height: 90px; }
+        .fg .hint { font-size: .76rem; color: #b5afa9; margin-top: 4px; }
+        .fg-check { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: #faf7f4; border-radius: 10px; border: 1.5px solid #e8e3de; }
+        .fg-check input[type=checkbox] { width: 18px; height: 18px; cursor: pointer; accent-color: #e8734a; }
+        .fg-check label { margin: 0; cursor: pointer; font-size: .93rem; }
 
-        .form-row.full {
-            grid-template-columns: 1fr;
-        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 4px; }
 
-        .btn-save {
-            background: #e8734a;
-            color: #fff;
-            padding: 14px 32px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 0.95rem;
-            transition: all 0.25s;
-            font-family: inherit;
-        }
+        /* ── BUTTONS ── */
+        .btn-save { background: #e8734a; color: #fff; padding: 13px 32px; border: none; border-radius: 50px; cursor: pointer; font-weight: 700; font-size: .93rem; transition: all .2s; font-family: inherit; margin-top: 8px; }
+        .btn-save:hover { background: #d45a32; transform: translateY(-1px); }
+        .btn-save:disabled { background: #d1d5db; cursor: not-allowed; transform: none; }
+        .btn-add { background: #e8734a; color: #fff; padding: 9px 18px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: .84rem; margin-bottom: 20px; font-family: inherit; transition: all .2s; }
+        .btn-add:hover { background: #d45a32; }
+        .btn-login { width: 100%; padding: 14px; background: #e8734a; color: #fff; border: none; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: all .2s; }
+        .btn-login:hover { background: #d45a32; }
+        .btn-edit { padding: 7px 14px; border: none; border-radius: 7px; cursor: pointer; font-size: .8rem; font-weight: 600; transition: all .2s; font-family: inherit; background: #dbeafe; color: #1e40af; }
+        .btn-edit:hover { background: #bfdbfe; }
+        .btn-delete { padding: 7px 14px; border: none; border-radius: 7px; cursor: pointer; font-size: .8rem; font-weight: 600; transition: all .2s; font-family: inherit; background: #fee2e2; color: #dc2626; }
+        .btn-delete:hover { background: #fecaca; }
+        .btn-logout { background: #fee2e2; color: #dc2626; padding: 9px 18px; border-radius: 8px; border: none; cursor: pointer; font-weight: 700; font-size: .84rem; font-family: inherit; transition: all .2s; }
+        .btn-logout:hover { background: #fecaca; }
+        .btn-cancel { background: #f3f4f6; color: #6b7280; padding: 13px 24px; border: none; border-radius: 50px; cursor: pointer; font-weight: 600; font-size: .9rem; font-family: inherit; transition: all .2s; }
+        .btn-cancel:hover { background: #e5e7eb; }
 
-        .btn-save:hover {
-            background: #d45a32;
-            transform: translateY(-1px);
-        }
+        /* ── LIST ITEMS ── */
+        .list-item { background: #faf7f4; border-radius: 12px; padding: 16px 20px; margin-bottom: 12px; border: 1px solid rgba(0,0,0,.06); display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+        .list-item-content { flex: 1; min-width: 0; }
+        .list-item-content h4 { font-size: .95rem; font-weight: 700; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .list-item-content p { font-size: .83rem; color: #8a8580; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .list-item-content .badge { display: inline-block; background: #e8734a; color: #fff; font-size: .7rem; font-weight: 700; padding: 2px 8px; border-radius: 50px; margin-left: 6px; vertical-align: middle; }
+        .list-item-actions { display: flex; gap: 8px; flex-shrink: 0; }
 
-        .btn-save:disabled {
-            background: #d1d5db;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .list-item {
-            background: #faf7f4;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 16px;
-            border: 1px solid rgba(0,0,0,0.06);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .list-item-content {
-            flex: 1;
-        }
-
-        .list-item h4 {
-            font-size: 1rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .list-item-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn-edit, .btn-delete {
-            padding: 8px 12px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: 600;
-            transition: all 0.25s;
-            font-family: inherit;
-        }
-
-        .btn-edit {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-
-        .btn-edit:hover {
-            background: #bfdbfe;
-        }
-
-        .btn-delete {
-            background: #fee2e2;
-            color: #dc2626;
-        }
-
-        .btn-delete:hover {
-            background: #fecaca;
-        }
-
-        .btn-add {
-            background: #e8734a;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
-            margin-bottom: 20px;
-            font-family: inherit;
-        }
-
-        .btn-add:hover {
-            background: #d45a32;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
+        /* ── MODAL ── */
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,.5); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
         .modal.show { display: flex; }
+        .modal-box { background: #fff; border-radius: 24px; padding: 36px; width: 100%; max-width: 560px; max-height: 85vh; overflow-y: auto; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+        .modal-header h3 { font-size: 1.2rem; font-weight: 800; }
+        .modal-close { background: #f3f4f6; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; transition: background .2s; }
+        .modal-close:hover { background: #e5e7eb; }
+        .modal-actions { display: flex; gap: 12px; margin-top: 20px; }
 
-        .modal-content {
-            background: #fff;
-            border-radius: 20px;
-            padding: 32px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            font-size: 1.3rem;
-            font-weight: 800;
-            margin-bottom: 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #8a8580;
-        }
-
-        .status-msg {
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 16px;
-            display: none;
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-
-        .status-msg.success {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .status-msg.error {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
+        /* ── STATUS MSG ── */
+        .status-msg { padding: 12px 18px; border-radius: 10px; margin-bottom: 16px; font-weight: 600; font-size: .85rem; display: none; }
+        .status-msg.success { background: #dcfce7; color: #166534; }
+        .status-msg.error { background: #fee2e2; color: #991b1b; }
         .status-msg.show { display: block; }
-
-        textarea {
-            font-family: inherit;
-        }
 
         @media (max-width: 768px) {
             .form-row { grid-template-columns: 1fr; }
-            .header { flex-direction: column; gap: 16px; }
-            .modal-content { width: 95%; }
-            .tabs { gap: 4px; }
-            .tab-btn { padding: 8px 12px; font-size: 0.75rem; }
+            .top-bar { flex-direction: column; gap: 12px; text-align: center; }
+            .modal-actions { flex-direction: column; }
+            .btn-save, .btn-cancel { width: 100%; text-align: center; }
         }
     </style>
 </head>
 <body>
 
-    <!-- LOGIN SCREEN -->
-    <div class="login-screen" id="loginScreen">
-        <div class="login-box">
-            <h1>Admin Panel</h1>
-            <p>İzmir Websitesi içerik yönetimi</p>
-            <form id="loginForm">
+<!-- LOGIN -->
+<div class="login-screen" id="loginScreen">
+    <div class="login-box">
+        <h1>Admin Panel</h1>
+        <p>İzmir Websitesi içerik yönetimi</p>
+        <form id="loginForm">
+            <div class="fg">
+                <label for="pwd">Şifre</label>
+                <input type="password" id="pwd" placeholder="Şifreyi girin" required>
+            </div>
+            <button type="submit" class="btn-login">Giriş Yap</button>
+            <div class="login-error" id="loginError">Şifre yanlış!</div>
+        </form>
+    </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="dashboard">
+    <div class="container">
+        <div class="top-bar">
+            <h2>İçerik Yönetimi</h2>
+            <div class="top-bar-right">
+                <a href="/" target="_blank" class="site-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Canlı Siteyi Gör</a>
+                <button class="btn-logout" id="logoutBtn">Çıkış</button>
+            </div>
+        </div>
+
+        <div class="status-msg" id="statusMsg"></div>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="seo">🔍 SEO</button>
+            <button class="tab-btn" data-tab="campaign">🔥 Kampanya</button>
+            <button class="tab-btn" data-tab="packages">📦 Paketler</button>
+            <button class="tab-btn" data-tab="services">⚙️ Hizmetler</button>
+            <button class="tab-btn" data-tab="portfolio">🖼️ Portföy</button>
+            <button class="tab-btn" data-tab="testimonials">💬 Yorumlar</button>
+            <button class="tab-btn" data-tab="extras">➕ Ek Hizmetler</button>
+        </div>
+
+        <!-- SEO -->
+        <div class="tab-content active" id="seoTab">
+            <h3>Site SEO Ayarları</h3>
+            <form id="seoForm">
                 <div class="fg">
-                    <label for="password">Şifre</label>
-                    <input type="password" id="password" placeholder="Şifreyi girin" required>
+                    <label>Meta Title <span style="color:#b5afa9;font-weight:400">(ideal 50-60 karakter)</span></label>
+                    <input type="text" id="seoTitle" maxlength="255">
                 </div>
-                <button type="submit" class="btn-login">Giriş Yap</button>
-                <div class="login-error" id="loginError">Şifre yanlış!</div>
+                <div class="fg">
+                    <label>Meta Description <span style="color:#b5afa9;font-weight:400">(ideal 150-160 karakter)</span></label>
+                    <textarea id="seoDesc"></textarea>
+                </div>
+                <div class="fg">
+                    <label>Meta Keywords</label>
+                    <input type="text" id="seoKeywords">
+                    <div class="hint">Virgülle ayırın: web tasarım izmir, e-ticaret, ...</div>
+                </div>
+                <button type="submit" class="btn-save">Kaydet</button>
             </form>
         </div>
-    </div>
 
-    <!-- DASHBOARD -->
-    <div class="dashboard" id="dashboard">
-        <div class="container">
-            <div class="header">
-                <h2>Admin Panel - İçerik Yönetimi</h2>
-                <button class="logout-btn" id="logoutBtn">Çıkış Yap</button>
-            </div>
-
-            <div class="tabs">
-                <button class="tab-btn active" data-tab="seo">SEO</button>
-                <button class="tab-btn" data-tab="campaign">Kampanya</button>
-                <button class="tab-btn" data-tab="packages">Paketler</button>
-                <button class="tab-btn" data-tab="services">Hizmetler</button>
-                <button class="tab-btn" data-tab="portfolio">Portföy</button>
-                <button class="tab-btn" data-tab="testimonials">Yorumlar</button>
-                <button class="tab-btn" data-tab="extras">Ek Hizmetler</button>
-            </div>
-
-            <div class="status-msg" id="statusMsg"></div>
-
-            <!-- SEO TAB -->
-            <div class="tab-content active" id="seoTab">
-                <h3>Site SEO Ayarları</h3>
-                <form id="seoForm" style="margin-top: 20px;">
-                    <div class="form-row full">
-                        <label>Meta Title</label>
-                        <input type="text" id="seoTitle" maxlength="255" style="width: 100%; padding: 10px; border: 1.5px solid #e8e3de; border-radius: 8px; font-family: inherit;">
-                    </div>
-                    <div class="form-row full">
-                        <label>Meta Description</label>
-                        <textarea id="seoDesc" style="width: 100%; padding: 10px; border: 1.5px solid #e8e3de; border-radius: 8px; font-family: inherit; min-height: 80px;"></textarea>
-                    </div>
-                    <div class="form-row full">
-                        <label>Meta Keywords</label>
-                        <input type="text" id="seoKeywords" style="width: 100%; padding: 10px; border: 1.5px solid #e8e3de; border-radius: 8px; font-family: inherit;">
-                    </div>
-                    <button type="submit" class="btn-save">Kaydet</button>
-                </form>
-            </div>
-
-            <!-- CAMPAIGN TAB -->
-            <div class="tab-content" id="campaignTab">
-                <h3>Kampanya Yönetimi</h3>
-                <form id="campaignForm" style="margin-top: 20px;">
-                    <div class="form-row">
-                        <div class="fg">
-                            <label>Başlık</label>
-                            <input type="text" id="campaignTitle" style="width: 100%; padding: 10px; border: 1.5px solid #e8e3de; border-radius: 8px; font-family: inherit;">
-                        </div>
-                        <div class="fg">
-                            <label>Eski Fiyat (₺)</label>
-                            <input type="number" id="campaignOldPrice" style="width: 100%; padding: 10px; border: 1.5px solid #e8e3de; border-radius: 8px; font-family: inherit;">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="fg">
-                            <label>Yeni Fiyat (₺)</label>
-                            <input type="number" id="campaignNewPrice" style="width: 100%; padding: 10px; border: 1.5px solid #e8e3de; border-radius: 8px; font-family: inherit;">
-                        </div>
-                        <div class="fg">
-                            <label>İndirim Yüzdesi (%)</label>
-                            <input type="number" id="campaignDiscount" style="width: 100%; padding: 10px; border: 1.5px solid #e8e3de; border-radius: 8px; font-family: inherit;">
-                        </div>
-                    </div>
-                    <div class="form-row full">
-                        <label>Özellikleri (Her satırda bir özellik)</label>
-                        <textarea id="campaignFeatures" style="width: 100%; padding: 10px; border: 1.5px solid #e8e3de; border-radius: 8px; font-family: inherit; min-height: 100px;"></textarea>
-                    </div>
-                    <div class="form-row full">
-                        <label>Not</label>
-                        <textarea id="campaignNotes" style="width: 100%; padding: 10px; border: 1.5px solid #e8e3de; border-radius: 8px; font-family: inherit; min-height: 60px;"></textarea>
-                    </div>
-                    <button type="submit" class="btn-save">Kaydet</button>
-                </form>
-            </div>
-
-            <!-- PACKAGES TAB -->
-            <div class="tab-content" id="packagesTab">
-                <h3>Paket Yönetimi</h3>
-                <button class="btn-add" onclick="openPackageModal()">+ Yeni Paket</button>
-                <div id="packagesList"></div>
-            </div>
-
-            <!-- SERVICES TAB -->
-            <div class="tab-content" id="servicesTab">
-                <h3>Hizmetler Yönetimi</h3>
-                <button class="btn-add" onclick="openServiceModal()">+ Yeni Hizmet</button>
-                <div id="servicesList"></div>
-            </div>
-
-            <!-- PORTFOLIO TAB -->
-            <div class="tab-content" id="portfolioTab">
-                <h3>Portföy Yönetimi</h3>
-                <button class="btn-add" onclick="openPortfolioModal()">+ Yeni Proje</button>
-                <div id="portfolioList"></div>
-            </div>
-
-            <!-- TESTIMONIALS TAB -->
-            <div class="tab-content" id="testimonialsTab">
-                <h3>Müşteri Yorumları</h3>
-                <button class="btn-add" onclick="openTestimonialModal()">+ Yeni Yorum</button>
-                <div id="testimonialsList"></div>
-            </div>
-
-            <!-- EXTRAS TAB -->
-            <div class="tab-content" id="extrasTab">
-                <h3>Ek Hizmetler Yönetimi</h3>
-                <button class="btn-add" onclick="openExtraModal()">+ Yeni Hizmet</button>
-                <div id="extrasList"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODALS -->
-    <div class="modal" id="packageModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span>Paket Düzenle</span>
-                <button class="modal-close" onclick="closeModal('packageModal')">&times;</button>
-            </div>
-            <form id="packageFormModal">
+        <!-- KAMPANYA -->
+        <div class="tab-content" id="campaignTab">
+            <h3>Kampanya Yönetimi</h3>
+            <form id="campaignForm">
                 <div class="fg">
-                    <label>Paket Adı</label>
-                    <input type="text" id="pkgName" style="width: 100%; padding: 10px; border: 1.5px solid #e8e3de; border-radius: 8px; font-family: inherit;">
+                    <label>Kampanya Başlığı</label>
+                    <input type="text" id="campaignTitle">
+                </div>
+                <div class="form-row">
+                    <div class="fg">
+                        <label>Eski Fiyat (₺)</label>
+                        <input type="number" id="campaignOldPrice">
+                    </div>
+                    <div class="fg">
+                        <label>Yeni Fiyat (₺)</label>
+                        <input type="number" id="campaignNewPrice">
+                    </div>
                 </div>
                 <div class="fg">
-                    <label>Fiyat (₺) - Enterprise için boş bırakın</label>
-                    <input type="number" id="pkgPrice" style="width: 100%; padding: 10px; border: 1.5px solid #e8e3de; border-radius: 8px; font-family: inherit;">
+                    <label>İndirim Yüzdesi (%)</label>
+                    <input type="number" id="campaignDiscount" placeholder="Otomatik hesaplanır veya manuel girin">
                 </div>
                 <div class="fg">
-                    <label>Özellikleri (Her satırda bir özellik)</label>
-                    <textarea id="pkgFeatures" style="width: 100%; padding: 10px; border: 1.5px solid #e8e3de; border-radius: 8px; font-family: inherit; min-height: 100px;"></textarea>
+                    <label>Özellikler <span style="color:#b5afa9;font-weight:400">(her satıra bir özellik)</span></label>
+                    <textarea id="campaignFeatures" style="min-height:120px"></textarea>
                 </div>
                 <div class="fg">
-                    <label>Popüler Paket mi?</label>
-                    <input type="checkbox" id="pkgPopular">
+                    <label>Alt Not</label>
+                    <input type="text" id="campaignNotes">
                 </div>
-                <button type="submit" class="btn-save" onclick="savePackage(event)">Kaydet</button>
+                <button type="submit" class="btn-save">Kaydet</button>
             </form>
         </div>
+
+        <!-- PAKETLER -->
+        <div class="tab-content" id="packagesTab">
+            <h3>Paket Yönetimi</h3>
+            <button class="btn-add" onclick="openModal('packageModal', null)">+ Yeni Paket Ekle</button>
+            <div id="packagesList"></div>
+        </div>
+
+        <!-- HİZMETLER -->
+        <div class="tab-content" id="servicesTab">
+            <h3>Hizmetler Yönetimi</h3>
+            <button class="btn-add" onclick="openModal('serviceModal', null)">+ Yeni Hizmet Ekle</button>
+            <div id="servicesList"></div>
+        </div>
+
+        <!-- PORTFÖY -->
+        <div class="tab-content" id="portfolioTab">
+            <h3>Portföy Yönetimi</h3>
+            <button class="btn-add" onclick="openModal('portfolioModal', null)">+ Yeni Proje Ekle</button>
+            <div id="portfolioList"></div>
+        </div>
+
+        <!-- YORUMLAR -->
+        <div class="tab-content" id="testimonialsTab">
+            <h3>Müşteri Yorumları</h3>
+            <button class="btn-add" onclick="openModal('testimonialModal', null)">+ Yeni Yorum Ekle</button>
+            <div id="testimonialsList"></div>
+        </div>
+
+        <!-- EK HİZMETLER -->
+        <div class="tab-content" id="extrasTab">
+            <h3>Ek Hizmetler Yönetimi</h3>
+            <button class="btn-add" onclick="openModal('extraModal', null)">+ Yeni Ekle</button>
+            <div id="extrasList"></div>
+        </div>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-    <script>
-        const SUPABASE_URL = 'https://qprycrbcomnfuevfgxbm.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwcnljcmJjb21uZnVldmZneGJtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3Njk4MjQsImV4cCI6MjA5MDM0NTgyNH0.o4u7CSDKj42O3ucg36rYIeEF104rc-8c5W3rjH3JqPA';
-        const ADMIN_PASSWORD = 'W%8=n@4é?&#j';
+<!-- PAKET MODAL -->
+<div class="modal" id="packageModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 id="packageModalTitle">Paket</h3>
+            <button class="modal-close" onclick="closeModal('packageModal')">✕</button>
+        </div>
+        <input type="hidden" id="pkgId">
+        <div class="fg">
+            <label>Paket Adı</label>
+            <input type="text" id="pkgName" placeholder="Örn: Profesyonel">
+        </div>
+        <div class="fg">
+            <label>Fiyat (₺)</label>
+            <input type="number" id="pkgPrice" placeholder="Enterprise için boş bırakın">
+        </div>
+        <div class="fg">
+            <label>Özellikler <span style="color:#b5afa9;font-weight:400">(her satıra bir özellik)</span></label>
+            <textarea id="pkgFeatures" style="min-height:120px"></textarea>
+        </div>
+        <div class="fg-check">
+            <input type="checkbox" id="pkgPopular">
+            <label for="pkgPopular">Popüler paket olarak işaretle <span style="color:#b5afa9;font-weight:400">(diğerleri otomatik kaldırılır)</span></label>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-save" onclick="savePackage()">Kaydet</button>
+            <button class="btn-cancel" onclick="closeModal('packageModal')">İptal</button>
+        </div>
+    </div>
+</div>
 
-        const { createClient } = window.supabase;
-        const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+<!-- HİZMET MODAL -->
+<div class="modal" id="serviceModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 id="serviceModalTitle">Hizmet</h3>
+            <button class="modal-close" onclick="closeModal('serviceModal')">✕</button>
+        </div>
+        <input type="hidden" id="svcId">
+        <div class="fg">
+            <label>Hizmet Adı</label>
+            <input type="text" id="svcName">
+        </div>
+        <div class="fg">
+            <label>Font Awesome İkon <span style="color:#b5afa9;font-weight:400">(fa- olmadan)</span></label>
+            <input type="text" id="svcIcon" placeholder="building-columns">
+            <div class="hint">fontawesome.com/icons adresinden ikon adını bulabilirsiniz</div>
+        </div>
+        <div class="fg">
+            <label>Açıklama</label>
+            <textarea id="svcDesc"></textarea>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-save" onclick="saveService()">Kaydet</button>
+            <button class="btn-cancel" onclick="closeModal('serviceModal')">İptal</button>
+        </div>
+    </div>
+</div>
 
-        // AUTH
-        document.getElementById('loginForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const pwd = document.getElementById('password').value;
-            if (pwd === ADMIN_PASSWORD) {
-                localStorage.setItem('adminLoggedIn', 'true');
-                showDashboard();
-            } else {
-                document.getElementById('loginError').style.display = 'block';
-            }
-        });
+<!-- PORTFÖY MODAL -->
+<div class="modal" id="portfolioModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 id="portfolioModalTitle">Proje</h3>
+            <button class="modal-close" onclick="closeModal('portfolioModal')">✕</button>
+        </div>
+        <input type="hidden" id="portId">
+        <div class="fg">
+            <label>Proje Adı</label>
+            <input type="text" id="portName">
+        </div>
+        <div class="fg">
+            <label>Kategori</label>
+            <input type="text" id="portCategory" placeholder="Otel, Restoran, Kafe...">
+        </div>
+        <div class="fg">
+            <label>Açıklama</label>
+            <textarea id="portDesc"></textarea>
+        </div>
+        <div class="fg">
+            <label>Website URL</label>
+            <input type="url" id="portUrl" placeholder="https://...">
+        </div>
+        <div class="fg">
+            <label>İkon <span style="color:#b5afa9;font-weight:400">(fa- olmadan)</span></label>
+            <input type="text" id="portIcon" placeholder="hotel, spa, utensils, scissors...">
+        </div>
+        <div class="modal-actions">
+            <button class="btn-save" onclick="savePortfolio()">Kaydet</button>
+            <button class="btn-cancel" onclick="closeModal('portfolioModal')">İptal</button>
+        </div>
+    </div>
+</div>
 
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            localStorage.removeItem('adminLoggedIn');
-            location.reload();
-        });
+<!-- YORUM MODAL -->
+<div class="modal" id="testimonialModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 id="testimonialModalTitle">Müşteri Yorumu</h3>
+            <button class="modal-close" onclick="closeModal('testimonialModal')">✕</button>
+        </div>
+        <input type="hidden" id="testiId">
+        <div class="form-row">
+            <div class="fg">
+                <label>Ad Soyad</label>
+                <input type="text" id="testiAuthor">
+            </div>
+            <div class="fg">
+                <label>Ünvan / Meslek</label>
+                <input type="text" id="testiRole" placeholder="Kafe Sahibi">
+            </div>
+        </div>
+        <div class="fg">
+            <label>Yorum</label>
+            <textarea id="testiText"></textarea>
+        </div>
+        <div class="fg">
+            <label>Puan (1-5)</label>
+            <select id="testiRating">
+                <option value="5">⭐⭐⭐⭐⭐ 5</option>
+                <option value="4">⭐⭐⭐⭐ 4</option>
+                <option value="3">⭐⭐⭐ 3</option>
+            </select>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-save" onclick="saveTestimonial()">Kaydet</button>
+            <button class="btn-cancel" onclick="closeModal('testimonialModal')">İptal</button>
+        </div>
+    </div>
+</div>
 
-        // INIT
-        if (localStorage.getItem('adminLoggedIn')) {
+<!-- EK HİZMET MODAL -->
+<div class="modal" id="extraModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 id="extraModalTitle">Ek Hizmet</h3>
+            <button class="modal-close" onclick="closeModal('extraModal')">✕</button>
+        </div>
+        <input type="hidden" id="extraId">
+        <div class="fg">
+            <label>Hizmet Adı</label>
+            <input type="text" id="extraName">
+        </div>
+        <div class="fg">
+            <label>İkon <span style="color:#b5afa9;font-weight:400">(fa- olmadan)</span></label>
+            <input type="text" id="extraIcon" placeholder="magnifying-glass-chart">
+        </div>
+        <div class="fg">
+            <label>Açıklama</label>
+            <input type="text" id="extraDesc">
+        </div>
+        <div class="modal-actions">
+            <button class="btn-save" onclick="saveExtra()">Kaydet</button>
+            <button class="btn-cancel" onclick="closeModal('extraModal')">İptal</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+    const { createClient } = window.supabase;
+    const db = createClient(
+        'https://qprycrbcomnfuevfgxbm.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwcnljcmJjb21uZnVldmZneGJtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3Njk4MjQsImV4cCI6MjA5MDM0NTgyNH0.o4u7CSDKj42O3ucg36rYIeEF104rc-8c5W3rjH3JqPA'
+    );
+    const PASS = 'W%8=n@4é?&#j';
+
+    // ── AUTH ──
+    document.getElementById('loginForm').addEventListener('submit', e => {
+        e.preventDefault();
+        if (document.getElementById('pwd').value === PASS) {
+            localStorage.setItem('iw_admin', '1');
             showDashboard();
+        } else {
+            document.getElementById('loginError').style.display = 'block';
         }
+    });
 
-        function showDashboard() {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('dashboard').classList.add('show');
-            loadAllData();
-        }
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        localStorage.removeItem('iw_admin');
+        location.reload();
+    });
 
-        // TABS
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                btn.classList.add('active');
-                document.getElementById(btn.dataset.tab + 'Tab').classList.add('active');
-            });
+    if (localStorage.getItem('iw_admin')) showDashboard();
+
+    function showDashboard() {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('dashboard').classList.add('show');
+        loadAll();
+    }
+
+    // ── TABS ──
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(btn.dataset.tab + 'Tab').classList.add('active');
         });
+    });
 
-        // LOAD ALL DATA
-        async function loadAllData() {
-            await loadSEO();
-            await loadCampaign();
-            await loadPackages();
-            await loadServices();
-            await loadPortfolio();
-            await loadTestimonials();
-            await loadExtras();
+    // ── STATUS ──
+    function showStatus(msg, ok) {
+        const el = document.getElementById('statusMsg');
+        el.textContent = msg;
+        el.className = 'status-msg show ' + (ok ? 'success' : 'error');
+        setTimeout(() => el.classList.remove('show'), 3500);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ── MODAL ──
+    function openModal(id, data) {
+        document.getElementById(id).classList.add('show');
+        if (data) fillModal(id, data);
+        else clearModal(id);
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('show');
+    }
+
+    function clearModal(id) {
+        document.getElementById(id).querySelectorAll('input:not([type=hidden]):not([type=checkbox]), textarea, select').forEach(el => el.value = '');
+        document.getElementById(id).querySelectorAll('input[type=checkbox]').forEach(el => el.checked = false);
+        // Reset hidden id fields
+        const idMap = { packageModal:'pkgId', serviceModal:'svcId', portfolioModal:'portId', testimonialModal:'testiId', extraModal:'extraId' };
+        if (idMap[id]) document.getElementById(idMap[id]).value = '';
+        // Set modal title to "Yeni ..."
+        const titleMap = { packageModal:'Yeni Paket', serviceModal:'Yeni Hizmet', portfolioModal:'Yeni Proje', testimonialModal:'Yeni Yorum', extraModal:'Yeni Ek Hizmet' };
+        const titleEl = document.getElementById(id.replace('Modal','ModalTitle'));
+        if (titleEl && titleMap[id]) titleEl.textContent = titleMap[id];
+    }
+
+    function fillModal(id, d) {
+        const titleMap = { packageModal:'Paketi Düzenle', serviceModal:'Hizmeti Düzenle', portfolioModal:'Projeyi Düzenle', testimonialModal:'Yorumu Düzenle', extraModal:'Ek Hizmeti Düzenle' };
+        const titleEl = document.getElementById(id.replace('Modal','ModalTitle'));
+        if (titleEl && titleMap[id]) titleEl.textContent = titleMap[id];
+
+        if (id === 'packageModal') {
+            document.getElementById('pkgId').value = d.id;
+            document.getElementById('pkgName').value = d.name || '';
+            document.getElementById('pkgPrice').value = d.price || '';
+            document.getElementById('pkgFeatures').value = d.features ? JSON.parse(d.features).join('\n') : '';
+            document.getElementById('pkgPopular').checked = !!d.popular;
+        } else if (id === 'serviceModal') {
+            document.getElementById('svcId').value = d.id;
+            document.getElementById('svcName').value = d.name || '';
+            document.getElementById('svcIcon').value = d.icon || '';
+            document.getElementById('svcDesc').value = d.description || '';
+        } else if (id === 'portfolioModal') {
+            document.getElementById('portId').value = d.id;
+            document.getElementById('portName').value = d.name || '';
+            document.getElementById('portCategory').value = d.category || '';
+            document.getElementById('portDesc').value = d.description || '';
+            document.getElementById('portUrl').value = d.url || '';
+            document.getElementById('portIcon').value = d.icon_type || '';
+        } else if (id === 'testimonialModal') {
+            document.getElementById('testiId').value = d.id;
+            document.getElementById('testiAuthor').value = d.author || '';
+            document.getElementById('testiRole').value = d.role || '';
+            document.getElementById('testiText').value = d.text || '';
+            document.getElementById('testiRating').value = d.rating || 5;
+        } else if (id === 'extraModal') {
+            document.getElementById('extraId').value = d.id;
+            document.getElementById('extraName').value = d.name || '';
+            document.getElementById('extraIcon').value = d.icon || '';
+            document.getElementById('extraDesc').value = d.description || '';
         }
+    }
 
-        async function loadSEO() {
-            const { data } = await db.from('site_config').select('*').single();
-            if (data) {
-                document.getElementById('seoTitle').value = data.meta_title || '';
-                document.getElementById('seoDesc').value = data.meta_description || '';
-                document.getElementById('seoKeywords').value = data.meta_keywords || '';
-            }
+    // ── LOAD ALL ──
+    async function loadAll() {
+        await loadSEO();
+        await loadCampaign();
+        await loadPackages();
+        await loadServices();
+        await loadPortfolio();
+        await loadTestimonials();
+        await loadExtras();
+    }
+
+    // ── SEO ──
+    async function loadSEO() {
+        const { data } = await db.from('site_config').select('*').single();
+        if (data) {
+            document.getElementById('seoTitle').value = data.meta_title || '';
+            document.getElementById('seoDesc').value = data.meta_description || '';
+            document.getElementById('seoKeywords').value = data.meta_keywords || '';
         }
+    }
 
-        document.getElementById('seoForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const { error } = await db.from('site_config').update({
-                meta_title: document.getElementById('seoTitle').value,
-                meta_description: document.getElementById('seoDesc').value,
-                meta_keywords: document.getElementById('seoKeywords').value,
-                updated_at: new Date()
-            }).eq('id', 1);
-            showStatus(error ? 'error: ' + error.message : 'SEO ayarları kaydedildi!', !error);
-        });
+    document.getElementById('seoForm').addEventListener('submit', async e => {
+        e.preventDefault();
+        const { error } = await db.from('site_config').update({
+            meta_title: document.getElementById('seoTitle').value,
+            meta_description: document.getElementById('seoDesc').value,
+            meta_keywords: document.getElementById('seoKeywords').value,
+            updated_at: new Date().toISOString()
+        }).eq('id', 1);
+        showStatus(error ? '❌ ' + error.message : '✅ SEO ayarları kaydedildi!', !error);
+    });
 
-        async function loadCampaign() {
-            const { data } = await db.from('campaign').select('*').eq('active', true).single();
-            if (data) {
-                document.getElementById('campaignTitle').value = data.title || '';
-                document.getElementById('campaignOldPrice').value = data.price_old || '';
-                document.getElementById('campaignNewPrice').value = data.price_new || '';
-                document.getElementById('campaignDiscount').value = data.discount_percent || '';
-                document.getElementById('campaignFeatures').value = (data.features ? JSON.parse(data.features).join('\n') : '');
-                document.getElementById('campaignNotes').value = data.notes || '';
-            }
+    // ── KAMPANYA ──
+    async function loadCampaign() {
+        const { data } = await db.from('campaign').select('*').eq('active', true).single();
+        if (data) {
+            document.getElementById('campaignTitle').value = data.title || '';
+            document.getElementById('campaignOldPrice').value = data.price_old || '';
+            document.getElementById('campaignNewPrice').value = data.price_new || '';
+            document.getElementById('campaignDiscount').value = data.discount_percent || '';
+            document.getElementById('campaignFeatures').value = data.features ? JSON.parse(data.features).join('\n') : '';
+            document.getElementById('campaignNotes').value = data.notes || '';
         }
+    }
 
-        document.getElementById('campaignForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const features = document.getElementById('campaignFeatures').value.split('\n').filter(f => f.trim());
-            const { error } = await db.from('campaign').update({
-                title: document.getElementById('campaignTitle').value,
-                price_old: parseInt(document.getElementById('campaignOldPrice').value),
-                price_new: parseInt(document.getElementById('campaignNewPrice').value),
-                discount_percent: parseInt(document.getElementById('campaignDiscount').value),
-                features: JSON.stringify(features),
-                notes: document.getElementById('campaignNotes').value,
-                updated_at: new Date()
-            }).eq('active', true);
-            showStatus(error ? 'error: ' + error.message : 'Kampanya kaydedildi!', !error);
-        });
+    document.getElementById('campaignForm').addEventListener('submit', async e => {
+        e.preventDefault();
+        const features = document.getElementById('campaignFeatures').value.split('\n').filter(f => f.trim());
+        const { error } = await db.from('campaign').update({
+            title: document.getElementById('campaignTitle').value,
+            price_old: parseInt(document.getElementById('campaignOldPrice').value) || 0,
+            price_new: parseInt(document.getElementById('campaignNewPrice').value) || 0,
+            discount_percent: parseInt(document.getElementById('campaignDiscount').value) || 0,
+            features: JSON.stringify(features),
+            notes: document.getElementById('campaignNotes').value,
+            updated_at: new Date().toISOString()
+        }).eq('active', true);
+        showStatus(error ? '❌ ' + error.message : '✅ Kampanya kaydedildi!', !error);
+    });
 
-        async function loadPackages() {
-            const { data } = await db.from('packages').select('*').order('order_index');
-            const html = data.map(pkg => `
-                <div class="list-item">
-                    <div class="list-item-content">
-                        <h4>${pkg.name}</h4>
-                        <p>${pkg.price ? '₺' + pkg.price : 'Özel Fiyat'}</p>
-                    </div>
-                    <div class="list-item-actions">
-                        <button class="btn-edit" onclick="editPackage(${pkg.id})">Düzenle</button>
-                        <button class="btn-delete" onclick="deletePackage(${pkg.id})">Sil</button>
-                    </div>
+    // ── PAKETLER ──
+    async function loadPackages() {
+        const { data } = await db.from('packages').select('*').order('order_index');
+        const html = (data || []).map(pkg => `
+            <div class="list-item">
+                <div class="list-item-content">
+                    <h4>${pkg.name} ${pkg.popular ? '<span class="badge">Popüler</span>' : ''}</h4>
+                    <p>${pkg.price ? '₺' + pkg.price.toLocaleString('tr-TR') : 'Özel Fiyat'}</p>
                 </div>
-            `).join('');
-            document.getElementById('packagesList').innerHTML = html;
-        }
-
-        async function loadServices() {
-            const { data } = await db.from('services').select('*').order('order_index');
-            const html = data.map(svc => `
-                <div class="list-item">
-                    <div class="list-item-content">
-                        <h4>${svc.name}</h4>
-                        <p>${svc.description}</p>
-                    </div>
-                    <div class="list-item-actions">
-                        <button class="btn-edit" onclick="editService(${svc.id})">Düzenle</button>
-                    </div>
+                <div class="list-item-actions">
+                    <button class="btn-edit" onclick="editPackage(${pkg.id})">Düzenle</button>
+                    <button class="btn-delete" onclick="deleteItem('packages', ${pkg.id}, loadPackages)">Sil</button>
                 </div>
-            `).join('');
-            document.getElementById('servicesList').innerHTML = html;
+            </div>`).join('');
+        document.getElementById('packagesList').innerHTML = html || '<p style="color:#8a8580">Henüz paket yok.</p>';
+    }
+
+    async function editPackage(id) {
+        const { data } = await db.from('packages').select('*').eq('id', id).single();
+        if (data) openModal('packageModal', data);
+    }
+
+    async function savePackage() {
+        const id = document.getElementById('pkgId').value;
+        const isPopular = document.getElementById('pkgPopular').checked;
+        const features = document.getElementById('pkgFeatures').value.split('\n').filter(f => f.trim());
+        const priceVal = document.getElementById('pkgPrice').value;
+
+        const payload = {
+            name: document.getElementById('pkgName').value,
+            price: priceVal ? parseInt(priceVal) : null,
+            features: JSON.stringify(features),
+            popular: isPopular,
+            updated_at: new Date().toISOString()
+        };
+
+        // Popüler seçildiyse diğerlerini sıfırla
+        if (isPopular) {
+            await db.from('packages').update({ popular: false }).neq('id', id || 0);
         }
 
-        async function loadPortfolio() {
-            const { data } = await db.from('portfolio').select('*').order('order_index');
-            const html = data.map(port => `
-                <div class="list-item">
-                    <div class="list-item-content">
-                        <h4>${port.name}</h4>
-                        <p>${port.category} - <a href="${port.url}" target="_blank">${port.url}</a></p>
-                    </div>
-                    <div class="list-item-actions">
-                        <button class="btn-edit" onclick="editPortfolio(${port.id})">Düzenle</button>
-                    </div>
-                </div>
-            `).join('');
-            document.getElementById('portfolioList').innerHTML = html;
+        let error;
+        if (id) {
+            ({ error } = await db.from('packages').update(payload).eq('id', id));
+        } else {
+            const { data: allPkgs } = await db.from('packages').select('order_index').order('order_index', { ascending: false }).limit(1);
+            payload.order_index = allPkgs && allPkgs.length ? allPkgs[0].order_index + 1 : 0;
+            ({ error } = await db.from('packages').insert(payload));
         }
 
-        async function loadTestimonials() {
-            const { data } = await db.from('testimonials').select('*').eq('active', true).order('order_index');
-            const html = data.map(test => `
-                <div class="list-item">
-                    <div class="list-item-content">
-                        <h4>${test.author} - ${test.role}</h4>
-                        <p>"${test.text}"</p>
-                    </div>
-                    <div class="list-item-actions">
-                        <button class="btn-edit" onclick="editTestimonial(${test.id})">Düzenle</button>
-                    </div>
-                </div>
-            `).join('');
-            document.getElementById('testimonialsList').innerHTML = html;
-        }
-
-        async function loadExtras() {
-            const { data } = await db.from('extra_services').select('*').order('order_index');
-            const html = data.map(ext => `
-                <div class="list-item">
-                    <div class="list-item-content">
-                        <h4>${ext.name}</h4>
-                        <p>${ext.description}</p>
-                    </div>
-                </div>
-            `).join('');
-            document.getElementById('extrasList').innerHTML = html;
-        }
-
-        // MODALS
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('show');
-        }
-
-        function openPackageModal() {
-            document.getElementById('packageModal').classList.add('show');
-        }
-
-        async function savePackage(e) {
-            e.preventDefault();
-            // Simple implementation - extend with actual save logic
+        if (!error) {
             closeModal('packageModal');
-            showStatus('Paket kaydedildi!', true);
+            loadPackages();
+            showStatus('✅ Paket kaydedildi!', true);
+        } else {
+            showStatus('❌ ' + error.message, false);
+        }
+    }
+
+    // ── HİZMETLER ──
+    async function loadServices() {
+        const { data } = await db.from('services').select('*').order('order_index');
+        const html = (data || []).map(s => `
+            <div class="list-item">
+                <div class="list-item-content">
+                    <h4><i class="fa-solid fa-${s.icon}" style="color:#e8734a;margin-right:8px"></i>${s.name}</h4>
+                    <p>${s.description}</p>
+                </div>
+                <div class="list-item-actions">
+                    <button class="btn-edit" onclick="editService(${s.id})">Düzenle</button>
+                    <button class="btn-delete" onclick="deleteItem('services', ${s.id}, loadServices)">Sil</button>
+                </div>
+            </div>`).join('');
+        document.getElementById('servicesList').innerHTML = html || '<p style="color:#8a8580">Henüz hizmet yok.</p>';
+    }
+
+    async function editService(id) {
+        const { data } = await db.from('services').select('*').eq('id', id).single();
+        if (data) openModal('serviceModal', data);
+    }
+
+    async function saveService() {
+        const id = document.getElementById('svcId').value;
+        const payload = {
+            name: document.getElementById('svcName').value,
+            icon: document.getElementById('svcIcon').value,
+            description: document.getElementById('svcDesc').value,
+            updated_at: new Date().toISOString()
+        };
+
+        let error;
+        if (id) {
+            ({ error } = await db.from('services').update(payload).eq('id', id));
+        } else {
+            const { data: all } = await db.from('services').select('order_index').order('order_index', { ascending: false }).limit(1);
+            payload.order_index = all && all.length ? all[0].order_index + 1 : 0;
+            ({ error } = await db.from('services').insert(payload));
         }
 
-        async function editPackage(id) {
-            openPackageModal();
+        if (!error) { closeModal('serviceModal'); loadServices(); showStatus('✅ Hizmet kaydedildi!', true); }
+        else showStatus('❌ ' + error.message, false);
+    }
+
+    // ── PORTFÖY ──
+    async function loadPortfolio() {
+        const { data } = await db.from('portfolio').select('*').order('order_index');
+        const html = (data || []).map(p => `
+            <div class="list-item">
+                <div class="list-item-content">
+                    <h4>${p.name}</h4>
+                    <p>${p.category} — <a href="${p.url}" target="_blank" style="color:#e8734a">${p.url}</a></p>
+                </div>
+                <div class="list-item-actions">
+                    <button class="btn-edit" onclick="editPortfolio(${p.id})">Düzenle</button>
+                    <button class="btn-delete" onclick="deleteItem('portfolio', ${p.id}, loadPortfolio)">Sil</button>
+                </div>
+            </div>`).join('');
+        document.getElementById('portfolioList').innerHTML = html || '<p style="color:#8a8580">Henüz proje yok.</p>';
+    }
+
+    async function editPortfolio(id) {
+        const { data } = await db.from('portfolio').select('*').eq('id', id).single();
+        if (data) openModal('portfolioModal', data);
+    }
+
+    async function savePortfolio() {
+        const id = document.getElementById('portId').value;
+        const payload = {
+            name: document.getElementById('portName').value,
+            category: document.getElementById('portCategory').value,
+            description: document.getElementById('portDesc').value,
+            url: document.getElementById('portUrl').value,
+            icon_type: document.getElementById('portIcon').value,
+            updated_at: new Date().toISOString()
+        };
+
+        let error;
+        if (id) {
+            ({ error } = await db.from('portfolio').update(payload).eq('id', id));
+        } else {
+            const { data: all } = await db.from('portfolio').select('order_index').order('order_index', { ascending: false }).limit(1);
+            payload.order_index = all && all.length ? all[0].order_index + 1 : 0;
+            ({ error } = await db.from('portfolio').insert(payload));
         }
 
-        async function deletePackage(id) {
-            if (confirm('Silmek istediğinize emin misiniz?')) {
-                const { error } = await db.from('packages').delete().eq('id', id);
-                if (!error) {
-                    loadPackages();
-                    showStatus('Paket silindi!', true);
-                }
-            }
+        if (!error) { closeModal('portfolioModal'); loadPortfolio(); showStatus('✅ Proje kaydedildi!', true); }
+        else showStatus('❌ ' + error.message, false);
+    }
+
+    // ── YORUMLAR ──
+    async function loadTestimonials() {
+        const { data } = await db.from('testimonials').select('*').order('order_index');
+        const html = (data || []).map(t => `
+            <div class="list-item">
+                <div class="list-item-content">
+                    <h4>${t.author} <span style="color:#f59e0b">${'★'.repeat(t.rating)}</span></h4>
+                    <p>"${t.text}"</p>
+                </div>
+                <div class="list-item-actions">
+                    <button class="btn-edit" onclick="editTestimonial(${t.id})">Düzenle</button>
+                    <button class="btn-delete" onclick="deleteItem('testimonials', ${t.id}, loadTestimonials)">Sil</button>
+                </div>
+            </div>`).join('');
+        document.getElementById('testimonialsList').innerHTML = html || '<p style="color:#8a8580">Henüz yorum yok.</p>';
+    }
+
+    async function editTestimonial(id) {
+        const { data } = await db.from('testimonials').select('*').eq('id', id).single();
+        if (data) openModal('testimonialModal', data);
+    }
+
+    async function saveTestimonial() {
+        const id = document.getElementById('testiId').value;
+        const payload = {
+            author: document.getElementById('testiAuthor').value,
+            role: document.getElementById('testiRole').value,
+            text: document.getElementById('testiText').value,
+            rating: parseInt(document.getElementById('testiRating').value),
+            active: true,
+            updated_at: new Date().toISOString()
+        };
+
+        let error;
+        if (id) {
+            ({ error } = await db.from('testimonials').update(payload).eq('id', id));
+        } else {
+            const { data: all } = await db.from('testimonials').select('order_index').order('order_index', { ascending: false }).limit(1);
+            payload.order_index = all && all.length ? all[0].order_index + 1 : 0;
+            ({ error } = await db.from('testimonials').insert(payload));
         }
 
-        // Placeholder modal functions
-        function openServiceModal() { alert('Service modal'); }
-        function editService(id) { alert('Edit service ' + id); }
-        function openPortfolioModal() { alert('Portfolio modal'); }
-        function editPortfolio(id) { alert('Edit portfolio ' + id); }
-        function openTestimonialModal() { alert('Testimonial modal'); }
-        function editTestimonial(id) { alert('Edit testimonial ' + id); }
-        function openExtraModal() { alert('Extra modal'); }
+        if (!error) { closeModal('testimonialModal'); loadTestimonials(); showStatus('✅ Yorum kaydedildi!', true); }
+        else showStatus('❌ ' + error.message, false);
+    }
 
-        function showStatus(msg, isSuccess) {
-            const el = document.getElementById('statusMsg');
-            el.textContent = msg;
-            el.className = 'status-msg show ' + (isSuccess ? 'success' : 'error');
-            setTimeout(() => el.classList.remove('show'), 3000);
+    // ── EK HİZMETLER ──
+    async function loadExtras() {
+        const { data } = await db.from('extra_services').select('*').order('order_index');
+        const html = (data || []).map(e => `
+            <div class="list-item">
+                <div class="list-item-content">
+                    <h4><i class="fa-solid fa-${e.icon}" style="color:#e8734a;margin-right:8px"></i>${e.name}</h4>
+                    <p>${e.description}</p>
+                </div>
+                <div class="list-item-actions">
+                    <button class="btn-edit" onclick="editExtra(${e.id})">Düzenle</button>
+                    <button class="btn-delete" onclick="deleteItem('extra_services', ${e.id}, loadExtras)">Sil</button>
+                </div>
+            </div>`).join('');
+        document.getElementById('extrasList').innerHTML = html || '<p style="color:#8a8580">Henüz ek hizmet yok.</p>';
+    }
+
+    async function editExtra(id) {
+        const { data } = await db.from('extra_services').select('*').eq('id', id).single();
+        if (data) openModal('extraModal', data);
+    }
+
+    async function saveExtra() {
+        const id = document.getElementById('extraId').value;
+        const payload = {
+            name: document.getElementById('extraName').value,
+            icon: document.getElementById('extraIcon').value,
+            description: document.getElementById('extraDesc').value,
+            updated_at: new Date().toISOString()
+        };
+
+        let error;
+        if (id) {
+            ({ error } = await db.from('extra_services').update(payload).eq('id', id));
+        } else {
+            const { data: all } = await db.from('extra_services').select('order_index').order('order_index', { ascending: false }).limit(1);
+            payload.order_index = all && all.length ? all[0].order_index + 1 : 0;
+            ({ error } = await db.from('extra_services').insert(payload));
         }
-    </script>
+
+        if (!error) { closeModal('extraModal'); loadExtras(); showStatus('✅ Ek hizmet kaydedildi!', true); }
+        else showStatus('❌ ' + error.message, false);
+    }
+
+    // ── SİL ──
+    async function deleteItem(table, id, reloadFn) {
+        if (!confirm('Bu kaydı silmek istediğinize emin misiniz?')) return;
+        const { error } = await db.from(table).delete().eq('id', id);
+        if (!error) { reloadFn(); showStatus('✅ Silindi!', true); }
+        else showStatus('❌ ' + error.message, false);
+    }
+
+    // Modal dışına tıklayınca kapat
+    document.querySelectorAll('.modal').forEach(m => {
+        m.addEventListener('click', e => { if (e.target === m) m.classList.remove('show'); });
+    });
+</script>
 </body>
 </html>
