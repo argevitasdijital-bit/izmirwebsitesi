@@ -775,6 +775,54 @@
                         </div>
                     </div>
                 </div>
+                <div class="hero-visual fade-up">
+                    <div class="mini-card accent">
+                        <div class="mc-header">
+                            <span class="mc-label">Projeler</span>
+                            <div class="mc-icon"><i class="fa-solid fa-chart-line"></i></div>
+                        </div>
+                        <div class="mc-value">24+</div>
+                        <div class="mc-bar">
+                            <span></span><span></span><span></span><span></span><span></span><span></span>
+                        </div>
+                    </div>
+                    <div class="mini-card">
+                        <div class="mc-header">
+                            <span class="mc-label">Müşteri</span>
+                            <div class="mc-icon"><i class="fa-solid fa-users"></i></div>
+                        </div>
+                        <div class="mc-value">18+</div>
+                        <div class="mc-wave">
+                            <span style="height:12px"></span><span style="height:20px"></span>
+                            <span style="height:16px"></span><span style="height:28px"></span>
+                            <span style="height:22px"></span><span style="height:30px"></span>
+                            <span style="height:18px"></span><span style="height:26px"></span>
+                        </div>
+                    </div>
+                    <div class="mini-card">
+                        <div class="mc-header">
+                            <span class="mc-label">Tasarım</span>
+                            <div class="mc-icon"><i class="fa-solid fa-palette"></i></div>
+                        </div>
+                        <div class="mc-value">Modern</div>
+                        <div class="mc-bar">
+                            <span></span><span></span><span></span><span></span><span></span>
+                        </div>
+                    </div>
+                    <div class="mini-card accent">
+                        <div class="mc-header">
+                            <span class="mc-label">Memnuniyet</span>
+                            <div class="mc-icon"><i class="fa-solid fa-heart"></i></div>
+                        </div>
+                        <div class="mc-value">%100</div>
+                        <div class="mc-wave">
+                            <span style="height:18px"></span><span style="height:24px"></span>
+                            <span style="height:14px"></span><span style="height:30px"></span>
+                            <span style="height:20px"></span><span style="height:26px"></span>
+                            <span style="height:16px"></span><span style="height:28px"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -787,7 +835,28 @@
                 <h2 class="section-title fade-up">Niye İzmir Websitesi?</h2>
                 <p class="section-desc fade-up">İşinizi dijitale taşımanın en kolay ve güvenilir yolu</p>
             </div>
-            <div class="about-grid" id="aboutGrid"></div>
+            <div class="about-grid">
+                <div class="about-card fade-up">
+                    <div class="about-icon"><i class="fa-solid fa-bolt"></i></div>
+                    <h3>Hızlı Teslimat</h3>
+                    <p>Kampanya paketi sadece 3-5 günde teslim. İşinizi bekletmiyoruz.</p>
+                </div>
+                <div class="about-card fade-up">
+                    <div class="about-icon"><i class="fa-solid fa-gem"></i></div>
+                    <h3>Profesyonel Tasarım</h3>
+                    <p>Modern ve etkileyici tasarımlar. Portföyümüz bunu kanıtlıyor.</p>
+                </div>
+                <div class="about-card fade-up">
+                    <div class="about-icon"><i class="fa-solid fa-coins"></i></div>
+                    <h3>Uygun Fiyat</h3>
+                    <p>₺10.000'den başlayan fiyatlarla profesyonel web sitesi sahibi olun.</p>
+                </div>
+                <div class="about-card fade-up">
+                    <div class="about-icon"><i class="fa-solid fa-headset"></i></div>
+                    <h3>Sürekli Destek</h3>
+                    <p>Opsiyonel bakım ve destek hizmetiyle siteniz hep güncel kalsın.</p>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -990,7 +1059,6 @@
         });
 
         // Scroll animations
-        const fadeEls = document.querySelectorAll('.fade-up');
         const obs = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -1002,7 +1070,11 @@
                 }
             });
         }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
-        fadeEls.forEach(el => obs.observe(el));
+
+        function observeAll() {
+            document.querySelectorAll('.fade-up:not(.visible)').forEach(el => obs.observe(el));
+        }
+        observeAll();
 
         // Load data
         async function loadData() {
@@ -1125,6 +1197,9 @@
                 const serviceSelect = document.getElementById('service');
                 const formOptionHtml = packages.map(pkg => `<option value="${pkg.name}">${pkg.name}</option>`).join('');
                 serviceSelect.innerHTML = '<option value="">Seçiniz...</option>' + formOptionHtml;
+
+                // Dinamik eklenen fade-up elementlerini observe et
+                observeAll();
 
             } catch (error) {
                 console.error('Veri yüklenirken hata:', error);
