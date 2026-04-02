@@ -12,6 +12,8 @@
     <meta name="author" content="İzmir Websitesi">
     <meta name="google-site-verification" content="rqOFhYlmiGNVwl2dgD_VPjUpmh0R_PO-eHUySfu0vtw">
     <link rel="canonical" href="https://www.izmirwebsitesi.net/">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="shortcut icon" href="/favicon.svg">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
@@ -1573,10 +1575,42 @@
         // Load data
         async function loadData() {
             try {
-                // Load about
+                // Load site config + tracking
                 const { data: aboutData } = await db.from('site_config').select('*').single();
                 if (aboutData) {
                     document.title = aboutData.meta_title || document.title;
+
+                    // Google Tag Manager
+                    if (aboutData.tracking_gtm) {
+                        const gtmScript = document.createElement('script');
+                        gtmScript.innerHTML = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${aboutData.tracking_gtm}');`;
+                        document.head.appendChild(gtmScript);
+                    }
+
+                    // Google Analytics 4
+                    if (aboutData.tracking_ga4 && !aboutData.tracking_gtm) {
+                        const ga4Script = document.createElement('script');
+                        ga4Script.async = true;
+                        ga4Script.src = `https://www.googletagmanager.com/gtag/js?id=${aboutData.tracking_ga4}`;
+                        document.head.appendChild(ga4Script);
+                        const ga4Init = document.createElement('script');
+                        ga4Init.innerHTML = `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${aboutData.tracking_ga4}');`;
+                        document.head.appendChild(ga4Init);
+                    }
+
+                    // Google Ads
+                    if (aboutData.tracking_gads) {
+                        const gadsInit = document.createElement('script');
+                        gadsInit.innerHTML = `gtag('config','${aboutData.tracking_gads}');`;
+                        document.head.appendChild(gadsInit);
+                    }
+
+                    // Meta Pixel
+                    if (aboutData.tracking_meta) {
+                        const metaScript = document.createElement('script');
+                        metaScript.innerHTML = `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${aboutData.tracking_meta}');fbq('track','PageView');`;
+                        document.head.appendChild(metaScript);
+                    }
                 }
 
                 // Load services

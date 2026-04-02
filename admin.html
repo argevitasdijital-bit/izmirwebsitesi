@@ -137,6 +137,7 @@
 
         <div class="tabs">
             <button class="tab-btn active" data-tab="seo">SEO</button>
+            <button class="tab-btn" data-tab="tracking">Tracking</button>
             <button class="tab-btn" data-tab="campaign">Kampanya</button>
             <button class="tab-btn" data-tab="packages">Paketler</button>
             <button class="tab-btn" data-tab="services">Hizmetler</button>
@@ -161,6 +162,34 @@
                     <label>Meta Keywords</label>
                     <input type="text" id="seoKeywords">
                     <div class="hint">Virgülle ayırın: web tasarım izmir, e-ticaret, ...</div>
+                </div>
+                <button type="submit" class="btn-save">Kaydet</button>
+            </form>
+        </div>
+
+        <!-- TRACKING -->
+        <div class="tab-content" id="trackingTab">
+            <h3>Tracking Kodları</h3>
+            <form id="trackingForm">
+                <div class="fg">
+                    <label>Google Analytics 4 — Measurement ID</label>
+                    <input type="text" id="trackingGa4" placeholder="G-XXXXXXXXXX">
+                    <div class="hint">Google Analytics 4 → Yönetici → Veri Akışları → Measurement ID</div>
+                </div>
+                <div class="fg">
+                    <label>Google Tag Manager — Container ID</label>
+                    <input type="text" id="trackingGtm" placeholder="GTM-XXXXXXX">
+                    <div class="hint">GTM kullanıyorsanız doldurun. GA4 ile birlikte kullanmayın.</div>
+                </div>
+                <div class="fg">
+                    <label>Google Ads — Conversion ID</label>
+                    <input type="text" id="trackingGads" placeholder="AW-XXXXXXXXX">
+                    <div class="hint">Google Ads → Araçlar → Dönüşümler → Conversion ID</div>
+                </div>
+                <div class="fg">
+                    <label>Meta (Facebook) Pixel ID</label>
+                    <input type="text" id="trackingMeta" placeholder="XXXXXXXXXXXXXXXXXX">
+                    <div class="hint">Meta Events Manager → Veri Kaynakları → Pixel → Pixel ID</div>
                 </div>
                 <button type="submit" class="btn-save">Kaydet</button>
             </form>
@@ -510,6 +539,7 @@
     // ── LOAD ALL ──
     async function loadAll() {
         await loadSEO();
+        await loadTracking();
         await loadCampaign();
         await loadPackages();
         await loadServices();
@@ -537,6 +567,29 @@
             updated_at: new Date().toISOString()
         }).eq('id', 1);
         showStatus(error ? '❌ ' + error.message : '✅ SEO ayarları kaydedildi!', !error);
+    });
+
+    // ── TRACKING ──
+    async function loadTracking() {
+        const { data } = await db.from('site_config').select('*').single();
+        if (data) {
+            document.getElementById('trackingGa4').value  = data.tracking_ga4  || '';
+            document.getElementById('trackingGtm').value  = data.tracking_gtm  || '';
+            document.getElementById('trackingGads').value = data.tracking_gads || '';
+            document.getElementById('trackingMeta').value = data.tracking_meta || '';
+        }
+    }
+
+    document.getElementById('trackingForm').addEventListener('submit', async e => {
+        e.preventDefault();
+        const { error } = await db.from('site_config').update({
+            tracking_ga4:  document.getElementById('trackingGa4').value.trim(),
+            tracking_gtm:  document.getElementById('trackingGtm').value.trim(),
+            tracking_gads: document.getElementById('trackingGads').value.trim(),
+            tracking_meta: document.getElementById('trackingMeta').value.trim(),
+            updated_at: new Date().toISOString()
+        }).eq('id', 1);
+        showStatus(error ? '❌ ' + error.message : '✅ Tracking kodları kaydedildi!', !error);
     });
 
     // ── KAMPANYA ──
