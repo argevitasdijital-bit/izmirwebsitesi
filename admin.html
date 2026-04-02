@@ -137,6 +137,7 @@
 
         <div class="tabs">
             <button class="tab-btn active" data-tab="seo">SEO</button>
+            <button class="tab-btn" data-tab="hero">Hero</button>
             <button class="tab-btn" data-tab="tracking">Tracking</button>
             <button class="tab-btn" data-tab="campaign">Kampanya</button>
             <button class="tab-btn" data-tab="packages">Paketler</button>
@@ -162,6 +163,29 @@
                     <label>Meta Keywords</label>
                     <input type="text" id="seoKeywords">
                     <div class="hint">Virgülle ayırın: web tasarım izmir, e-ticaret, ...</div>
+                </div>
+                <button type="submit" class="btn-save">Kaydet</button>
+            </form>
+        </div>
+
+        <!-- HERO -->
+        <div class="tab-content" id="heroTab">
+            <h3>Hero Bölümü</h3>
+            <form id="heroForm">
+                <div class="fg">
+                    <label>Kampanya Butonu Yazısı</label>
+                    <input type="text" id="heroCampaignText" placeholder="KAMPANYA: ₺10.000'den Başla">
+                    <div class="hint">Hero'daki turuncu butonun üzerindeki yazı</div>
+                </div>
+                <div class="form-row">
+                    <div class="fg">
+                        <label>Başlangıç Fiyatı</label>
+                        <input type="text" id="heroStartPrice" placeholder="₺10.000">
+                    </div>
+                    <div class="fg">
+                        <label>Fiyat Etiketi</label>
+                        <input type="text" id="heroStartPriceLabel" placeholder="Başlangıç Fiyatı">
+                    </div>
                 </div>
                 <button type="submit" class="btn-save">Kaydet</button>
             </form>
@@ -539,6 +563,7 @@
     // ── LOAD ALL ──
     async function loadAll() {
         await loadSEO();
+        await loadHero();
         await loadTracking();
         await loadCampaign();
         await loadPackages();
@@ -567,6 +592,27 @@
             updated_at: new Date().toISOString()
         }).eq('id', 1);
         showStatus(error ? '❌ ' + error.message : '✅ SEO ayarları kaydedildi!', !error);
+    });
+
+    // ── HERO ──
+    async function loadHero() {
+        const { data } = await db.from('site_config').select('*').single();
+        if (data) {
+            document.getElementById('heroCampaignText').value   = data.hero_campaign_text       || '';
+            document.getElementById('heroStartPrice').value     = data.hero_start_price         || '';
+            document.getElementById('heroStartPriceLabel').value= data.hero_start_price_label   || '';
+        }
+    }
+
+    document.getElementById('heroForm').addEventListener('submit', async e => {
+        e.preventDefault();
+        const { error } = await db.from('site_config').update({
+            hero_campaign_text:      document.getElementById('heroCampaignText').value,
+            hero_start_price:        document.getElementById('heroStartPrice').value,
+            hero_start_price_label:  document.getElementById('heroStartPriceLabel').value,
+            updated_at: new Date().toISOString()
+        }).eq('id', 1);
+        showStatus(error ? '❌ ' + error.message : '✅ Hero güncellendi!', !error);
     });
 
     // ── TRACKING ──

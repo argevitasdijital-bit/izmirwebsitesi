@@ -1010,8 +1010,8 @@
                     <h1 class="fade-up">Dijital Dünyada <span>İşiniz Parlasın</span></h1>
                     <p class="hero-desc fade-up">Küçük işletmeleri büyüten profesyonel web tasarım ve dijital çözümler. İzmir merkezli, hızlı teslimat.</p>
                     <div class="hero-buttons fade-up">
-                        <a href="https://wa.me/905333889923?text=Merhaba!%2010.000%20TL%20kampanya%20paketi%20hakkında%20bilgi%20istiyorum" class="btn btn-accent" target="_blank" rel="noopener">
-                            <i class="fa-solid fa-fire"></i> KAMPANYA: ₺10.000'den Başla
+                        <a href="https://wa.me/905333889923?text=Merhaba!%2010.000%20TL%20kampanya%20paketi%20hakkında%20bilgi%20istiyorum" class="btn btn-accent" target="_blank" rel="noopener" id="heroCampaignBtn">
+                            <i class="fa-solid fa-fire"></i> <span id="heroCampaignText">KAMPANYA: ₺10.000'den Başla</span>
                         </a>
                         <a href="#iletisim" class="btn btn-glass">
                             <i class="fa-solid fa-paper-plane"></i> Detaylı Teklif Al
@@ -1023,8 +1023,8 @@
                             <span>Hızlı Teslimat</span>
                         </div>
                         <div class="hero-stat">
-                            <strong>₺10.000</strong>
-                            <span>Başlangıç Fiyatı</span>
+                            <strong id="heroStartPrice">₺10.000</strong>
+                            <span id="heroStartPriceLabel">Başlangıç Fiyatı</span>
                         </div>
                         <div class="hero-stat">
                             <strong>%100</strong>
@@ -1579,6 +1579,14 @@
                 const { data: aboutData } = await db.from('site_config').select('*').single();
                 if (aboutData) {
                     document.title = aboutData.meta_title || document.title;
+
+                    // Hero dinamik alanlar
+                    if (aboutData.hero_start_price)
+                        document.getElementById('heroStartPrice').textContent = aboutData.hero_start_price;
+                    if (aboutData.hero_start_price_label)
+                        document.getElementById('heroStartPriceLabel').textContent = aboutData.hero_start_price_label;
+                    if (aboutData.hero_campaign_text)
+                        document.getElementById('heroCampaignText').textContent = aboutData.hero_campaign_text;
 
                     // Google Tag Manager
                     if (aboutData.tracking_gtm) {
