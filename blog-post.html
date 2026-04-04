@@ -157,12 +157,14 @@
             return;
         }
 
-        // Update meta tags
-        document.getElementById('pageTitle').textContent = data.title + ' - İzmir Websitesi';
-        if (data.summary) document.getElementById('pageDesc').setAttribute('content', data.summary);
+        // Update meta tags — prefer dedicated SEO fields, fall back to title/summary
+        const metaTitle = data.seo_title || data.title;
+        const metaDesc  = data.seo_description || data.summary || '';
+        document.getElementById('pageTitle').textContent = metaTitle + ' - İzmir Websitesi';
+        document.getElementById('pageDesc').setAttribute('content', metaDesc);
         document.getElementById('pageCanonical').setAttribute('href', 'https://www.izmirwebsitesi.net/blog-post.html?slug=' + slug);
-        document.getElementById('ogTitle').setAttribute('content', data.title);
-        if (data.summary) document.getElementById('ogDesc').setAttribute('content', data.summary);
+        document.getElementById('ogTitle').setAttribute('content', metaTitle);
+        document.getElementById('ogDesc').setAttribute('content', metaDesc);
         if (data.cover_image) document.getElementById('ogImage').setAttribute('content', data.cover_image);
 
         // Schema.org Article

@@ -6,6 +6,7 @@
     <title>İzmir Websitesi - Admin Panel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f6f1ec; color: #2d2a26; line-height: 1.6; }
@@ -102,6 +103,25 @@
             .modal-actions { flex-direction: column; }
             .btn-save, .btn-cancel { width: 100%; text-align: center; }
         }
+
+        /* ── QUILL ── */
+        .ql-toolbar.ql-snow { border-radius: 10px 10px 0 0 !important; border-color: #e8e3de !important; background: #faf7f4; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .ql-container.ql-snow { border-radius: 0 0 10px 10px !important; border-color: #e8e3de !important; font-family: 'Plus Jakarta Sans', sans-serif; font-size: .93rem; }
+        .ql-editor { min-height: 240px; color: #2d2a26; }
+        .ql-editor.ql-blank::before { color: #b5afa9; font-style: normal; }
+        .ql-toolbar .ql-stroke { stroke: #2d2a26; }
+        .ql-toolbar .ql-fill { fill: #2d2a26; }
+        .ql-toolbar button:hover .ql-stroke, .ql-toolbar button.ql-active .ql-stroke { stroke: #e8734a !important; }
+        .ql-toolbar button:hover .ql-fill, .ql-toolbar button.ql-active .ql-fill { fill: #e8734a !important; }
+        .ql-toolbar .ql-picker-label:hover, .ql-toolbar .ql-picker-label.ql-active { color: #e8734a !important; }
+        .ql-toolbar .ql-picker-label:hover .ql-stroke { stroke: #e8734a !important; }
+
+        /* SEO section divider */
+        .section-divider { border: none; border-top: 1.5px solid #f0ebe5; margin: 20px 0 16px; }
+        .section-label { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: #b5afa9; margin-bottom: 14px; }
+        .char-count { font-size: .75rem; color: #b5afa9; float: right; }
+        .char-count.warn { color: #f59e0b; }
+        .char-count.over { color: #dc2626; }
     </style>
 </head>
 <body>
@@ -458,7 +478,7 @@
 
 <!-- BLOG MODAL -->
 <div class="modal" id="blogModal">
-    <div class="modal-box" style="max-width:700px">
+    <div class="modal-box" style="max-width:860px;max-height:90vh;overflow-y:auto">
         <div class="modal-header">
             <h3 id="blogModalTitle">Yeni Yazı</h3>
             <button class="modal-close" onclick="closeModal('blogModal')">✕</button>
@@ -478,10 +498,6 @@
             <label>Özet <span style="color:#b5afa9;font-weight:400">(liste sayfasında görünür)</span></label>
             <textarea id="blogSummary" style="min-height:70px" placeholder="Kısa özet..."></textarea>
         </div>
-        <div class="fg">
-            <label>İçerik <span style="color:#b5afa9;font-weight:400">(HTML destekler)</span></label>
-            <textarea id="blogContent" style="min-height:200px" placeholder="Yazı içeriği..."></textarea>
-        </div>
         <div class="form-row">
             <div class="fg">
                 <label>Kapak Görseli URL</label>
@@ -492,10 +508,28 @@
                 <input type="text" id="blogCategory" placeholder="SEO, Web Tasarım...">
             </div>
         </div>
+        <div class="fg">
+            <label>İçerik</label>
+            <div id="blogEditor"></div>
+        </div>
         <div class="fg-check">
             <input type="checkbox" id="blogPublished">
             <label for="blogPublished">Yayınla (işaretli değilse taslak olarak kaydedilir)</label>
         </div>
+
+        <hr class="section-divider">
+        <div class="section-label">SEO Ayarları</div>
+        <div class="fg">
+            <label>SEO Başlığı <span class="char-count" id="seoTitleCount">0/60</span></label>
+            <input type="text" id="blogSeoTitle" placeholder="Boş bırakılırsa yazı başlığı kullanılır" maxlength="80" oninput="updateCharCount('blogSeoTitle','seoTitleCount',60)">
+            <div class="hint">Google'da görünen başlık. İdeal: 50–60 karakter.</div>
+        </div>
+        <div class="fg">
+            <label>SEO Açıklaması <span class="char-count" id="seoDescCount">0/160</span></label>
+            <textarea id="blogSeoDesc" style="min-height:80px" placeholder="Boş bırakılırsa özet kullanılır" maxlength="200" oninput="updateCharCount('blogSeoDesc','seoDescCount',160)"></textarea>
+            <div class="hint">Google'da görünen açıklama. İdeal: 150–160 karakter.</div>
+        </div>
+
         <div class="modal-actions">
             <button class="btn-save" onclick="savePost()">Kaydet</button>
             <button class="btn-cancel" onclick="closeModal('blogModal')">İptal</button>
@@ -504,6 +538,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
 <script>
     const { createClient } = window.supabase;
     const db = createClient(
@@ -569,6 +604,7 @@
     function clearModal(id) {
         document.getElementById(id).querySelectorAll('input:not([type=hidden]):not([type=checkbox]), textarea, select').forEach(el => el.value = '');
         document.getElementById(id).querySelectorAll('input[type=checkbox]').forEach(el => el.checked = false);
+        if (id === 'blogModal' && window.blogQuill) { window.blogQuill.setContents([]); updateCharCount('blogSeoTitle','seoTitleCount',60); updateCharCount('blogSeoDesc','seoDescCount',160); }
         // Reset hidden id fields
         const idMap = { packageModal:'pkgId', serviceModal:'svcId', portfolioModal:'portId', testimonialModal:'testiId', extraModal:'extraId', blogModal:'blogId' };
         if (idMap[id]) document.getElementById(idMap[id]).value = '';
@@ -617,10 +653,14 @@
             document.getElementById('blogTitle').value = d.title || '';
             document.getElementById('blogSlug').value = d.slug || '';
             document.getElementById('blogSummary').value = d.summary || '';
-            document.getElementById('blogContent').value = d.content || '';
             document.getElementById('blogCoverImage').value = d.cover_image || '';
             document.getElementById('blogCategory').value = d.category || '';
             document.getElementById('blogPublished').checked = !!d.published;
+            document.getElementById('blogSeoTitle').value = d.seo_title || '';
+            document.getElementById('blogSeoDesc').value = d.seo_description || '';
+            updateCharCount('blogSeoTitle','seoTitleCount',60);
+            updateCharCount('blogSeoDesc','seoDescCount',160);
+            if (window.blogQuill) window.blogQuill.clipboard.dangerouslyPasteHTML(d.content || '');
         }
     }
 
@@ -998,10 +1038,12 @@
             title: document.getElementById('blogTitle').value,
             slug: document.getElementById('blogSlug').value,
             summary: document.getElementById('blogSummary').value,
-            content: document.getElementById('blogContent').value,
+            content: window.blogQuill ? window.blogQuill.root.innerHTML : '',
             cover_image: document.getElementById('blogCoverImage').value,
             category: document.getElementById('blogCategory').value,
             published: document.getElementById('blogPublished').checked,
+            seo_title: document.getElementById('blogSeoTitle').value,
+            seo_description: document.getElementById('blogSeoDesc').value,
             updated_at: new Date().toISOString()
         };
 
@@ -1043,6 +1085,44 @@
     document.querySelectorAll('.modal').forEach(m => {
         m.addEventListener('click', e => { if (e.target === m) m.classList.remove('show'); });
     });
+
+    // ── QUILL INIT ──
+    window.blogQuill = new Quill('#blogEditor', {
+        theme: 'snow',
+        placeholder: 'Yazı içeriğini buraya yazın...',
+        modules: {
+            toolbar: {
+                container: [
+                    [{ header: [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ list: 'ordered' }, { list: 'bullet' }],
+                    [{ align: [] }],
+                    ['blockquote'],
+                    ['link', 'image'],
+                    ['clean']
+                ],
+                handlers: {
+                    image: function() {
+                        const url = prompt('Resim URL\'sini girin:');
+                        if (url) {
+                            const range = window.blogQuill.getSelection(true);
+                            window.blogQuill.insertEmbed(range.index, 'image', url);
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // ── CHAR COUNTER ──
+    function updateCharCount(inputId, counterId, limit) {
+        const el = document.getElementById(inputId);
+        const counter = document.getElementById(counterId);
+        if (!el || !counter) return;
+        const len = el.value.length;
+        counter.textContent = len + '/' + limit;
+        counter.className = 'char-count' + (len > limit ? ' over' : len > limit * 0.85 ? ' warn' : '');
+    }
 </script>
 </body>
 </html>
