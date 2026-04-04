@@ -122,6 +122,14 @@
         .char-count { font-size: .75rem; color: #b5afa9; float: right; }
         .char-count.warn { color: #f59e0b; }
         .char-count.over { color: #dc2626; }
+
+        /* ── IMAGE UPLOAD ── */
+        .upload-row { display: flex; gap: 8px; align-items: stretch; }
+        .upload-row input { flex: 1; min-width: 0; }
+        .btn-upload-img { padding: 10px 16px; background: #1a1714; color: #fff; border-radius: 10px; font-size: .84rem; font-weight: 700; cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 6px; transition: background .2s; font-family: inherit; border: none; }
+        .btn-upload-img:hover { background: #3a3530; }
+        .cover-preview { max-height: 160px; border-radius: 10px; object-fit: cover; max-width: 100%; margin-top: 10px; display: block; }
+        .upload-status { font-size: .82rem; margin-top: 6px; color: #8a8580; }
     </style>
 </head>
 <body>
@@ -498,15 +506,21 @@
             <label>Özet <span style="color:#b5afa9;font-weight:400">(liste sayfasında görünür)</span></label>
             <textarea id="blogSummary" style="min-height:70px" placeholder="Kısa özet..."></textarea>
         </div>
-        <div class="form-row">
-            <div class="fg">
-                <label>Kapak Görseli URL</label>
-                <input type="url" id="blogCoverImage" placeholder="https://...">
+        <div class="fg">
+            <label>Kapak Görseli</label>
+            <div class="upload-row">
+                <input type="url" id="blogCoverImage" placeholder="https://... ya da aşağıdan yükleyin">
+                <button type="button" class="btn-upload-img" onclick="document.getElementById('blogCoverFile').click()">
+                    <i class="fa-solid fa-image"></i> Yükle
+                </button>
+                <input type="file" id="blogCoverFile" accept="image/*" style="display:none" onchange="handleCoverUpload(this)">
             </div>
-            <div class="fg">
-                <label>Kategori</label>
-                <input type="text" id="blogCategory" placeholder="SEO, Web Tasarım...">
-            </div>
+            <div id="uploadStatus" class="upload-status" style="display:none"></div>
+            <img id="coverPreviewImg" class="cover-preview" style="display:none">
+        </div>
+        <div class="fg">
+            <label>Kategori</label>
+            <input type="text" id="blogCategory" placeholder="SEO, Web Tasarım...">
         </div>
         <div class="fg">
             <label>İçerik</label>
@@ -604,7 +618,13 @@
     function clearModal(id) {
         document.getElementById(id).querySelectorAll('input:not([type=hidden]):not([type=checkbox]), textarea, select').forEach(el => el.value = '');
         document.getElementById(id).querySelectorAll('input[type=checkbox]').forEach(el => el.checked = false);
-        if (id === 'blogModal' && window.blogQuill) { window.blogQuill.setContents([]); updateCharCount('blogSeoTitle','seoTitleCount',60); updateCharCount('blogSeoDesc','seoDescCount',160); }
+        if (id === 'blogModal' && window.blogQuill) {
+            window.blogQuill.setContents([]);
+            updateCharCount('blogSeoTitle','seoTitleCount',60);
+            updateCharCount('blogSeoDesc','seoDescCount',160);
+            document.getElementById('coverPreviewImg').style.display = 'none';
+            document.getElementById('uploadStatus').style.display = 'none';
+        }
         // Reset hidden id fields
         const idMap = { packageModal:'pkgId', serviceModal:'svcId', portfolioModal:'portId', testimonialModal:'testiId', extraModal:'extraId', blogModal:'blogId' };
         if (idMap[id]) document.getElementById(idMap[id]).value = '';
@@ -654,6 +674,9 @@
             document.getElementById('blogSlug').value = d.slug || '';
             document.getElementById('blogSummary').value = d.summary || '';
             document.getElementById('blogCoverImage').value = d.cover_image || '';
+            const prev = document.getElementById('coverPreviewImg');
+            if (d.cover_image) { prev.src = d.cover_image; prev.style.display = 'block'; }
+            else { prev.style.display = 'none'; }
             document.getElementById('blogCategory').value = d.category || '';
             document.getElementById('blogPublished').checked = !!d.published;
             document.getElementById('blogSeoTitle').value = d.seo_title || '';
@@ -1085,6 +1108,56 @@
     document.querySelectorAll('.modal').forEach(m => {
         m.addEventListener('click', e => { if (e.target === m) m.classList.remove('show'); });
     });
+
+    // ── IMAGE COMPRESS + UPLOAD ──
+    async function compressImage(file) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            const blobUrl = URL.createObjectURL(file);
+            img.onload = () => {
+                URL.revokeObjectURL(blobUrl);
+                const MAX = 1920;
+                let w = img.naturalWidth, h = img.naturalHeight;
+                if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+                const canvas = document.createElement('canvas');
+                canvas.width = w; canvas.height = h;
+                canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('Sıkıştırma başarısız')), 'image/webp', 0.92);
+            };
+            img.onerror = () => reject(new Error('Görsel okunamadı'));
+            img.src = blobUrl;
+        });
+    }
+
+    async function handleCoverUpload(input) {
+        const file = input.files[0];
+        if (!file) return;
+        const status = document.getElementById('uploadStatus');
+        const preview = document.getElementById('coverPreviewImg');
+        status.style.display = 'block';
+        status.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sıkıştırılıyor...';
+        preview.style.display = 'none';
+        input.value = '';
+        try {
+            const compressed = await compressImage(file);
+            const origKB = (file.size / 1024).toFixed(0);
+            const compKB = (compressed.size / 1024).toFixed(0);
+            status.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor...';
+            const filename = 'blog/' + Date.now() + '-' + Math.random().toString(36).slice(2) + '.webp';
+            const { error } = await db.storage.from('uploads').upload(filename, compressed, {
+                contentType: 'image/webp', cacheControl: '31536000', upsert: false
+            });
+            if (error) throw error;
+            const { data: urlData } = db.storage.from('uploads').getPublicUrl(filename);
+            const url = urlData.publicUrl;
+            document.getElementById('blogCoverImage').value = url;
+            preview.src = url;
+            preview.style.display = 'block';
+            status.innerHTML = '<i class="fa-solid fa-check" style="color:#16a34a"></i> Yüklendi — ' + origKB + 'KB → ' + compKB + 'KB WebP';
+        } catch (err) {
+            status.innerHTML = '<i class="fa-solid fa-xmark" style="color:#dc2626"></i> Hata: ' + err.message;
+        }
+    }
 
     // ── QUILL INIT ──
     window.blogQuill = new Quill('#blogEditor', {
