@@ -145,6 +145,7 @@
             <button class="tab-btn" data-tab="portfolio">Portföy</button>
             <button class="tab-btn" data-tab="testimonials">Yorumlar</button>
             <button class="tab-btn" data-tab="extras">Ek Hizmetler</button>
+            <button class="tab-btn" data-tab="blog">Blog</button>
         </div>
 
         <!-- SEO -->
@@ -286,6 +287,13 @@
             <h3>Ek Hizmetler Yönetimi</h3>
             <button class="btn-add" onclick="openModal('extraModal', null)">+ Yeni Ekle</button>
             <div id="extrasList"></div>
+        </div>
+
+        <!-- BLOG -->
+        <div class="tab-content" id="blogTab">
+            <h3>Blog Yazıları</h3>
+            <button class="btn-add" onclick="openModal('blogModal', null)">+ Yeni Yazı Ekle</button>
+            <div id="blogList"></div>
         </div>
     </div>
 </div>
@@ -448,6 +456,53 @@
     </div>
 </div>
 
+<!-- BLOG MODAL -->
+<div class="modal" id="blogModal">
+    <div class="modal-box" style="max-width:700px">
+        <div class="modal-header">
+            <h3 id="blogModalTitle">Yeni Yazı</h3>
+            <button class="modal-close" onclick="closeModal('blogModal')">✕</button>
+        </div>
+        <input type="hidden" id="blogId">
+        <div class="form-row">
+            <div class="fg">
+                <label>Başlık</label>
+                <input type="text" id="blogTitle" placeholder="Yazı başlığı" oninput="autoSlug()">
+            </div>
+            <div class="fg">
+                <label>Slug <span style="color:#b5afa9;font-weight:400">(URL)</span></label>
+                <input type="text" id="blogSlug" placeholder="yazi-basligi">
+            </div>
+        </div>
+        <div class="fg">
+            <label>Özet <span style="color:#b5afa9;font-weight:400">(liste sayfasında görünür)</span></label>
+            <textarea id="blogSummary" style="min-height:70px" placeholder="Kısa özet..."></textarea>
+        </div>
+        <div class="fg">
+            <label>İçerik <span style="color:#b5afa9;font-weight:400">(HTML destekler)</span></label>
+            <textarea id="blogContent" style="min-height:200px" placeholder="Yazı içeriği..."></textarea>
+        </div>
+        <div class="form-row">
+            <div class="fg">
+                <label>Kapak Görseli URL</label>
+                <input type="url" id="blogCoverImage" placeholder="https://...">
+            </div>
+            <div class="fg">
+                <label>Kategori</label>
+                <input type="text" id="blogCategory" placeholder="SEO, Web Tasarım...">
+            </div>
+        </div>
+        <div class="fg-check">
+            <input type="checkbox" id="blogPublished">
+            <label for="blogPublished">Yayınla (işaretli değilse taslak olarak kaydedilir)</label>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-save" onclick="savePost()">Kaydet</button>
+            <button class="btn-cancel" onclick="closeModal('blogModal')">İptal</button>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
     const { createClient } = window.supabase;
@@ -515,16 +570,16 @@
         document.getElementById(id).querySelectorAll('input:not([type=hidden]):not([type=checkbox]), textarea, select').forEach(el => el.value = '');
         document.getElementById(id).querySelectorAll('input[type=checkbox]').forEach(el => el.checked = false);
         // Reset hidden id fields
-        const idMap = { packageModal:'pkgId', serviceModal:'svcId', portfolioModal:'portId', testimonialModal:'testiId', extraModal:'extraId' };
+        const idMap = { packageModal:'pkgId', serviceModal:'svcId', portfolioModal:'portId', testimonialModal:'testiId', extraModal:'extraId', blogModal:'blogId' };
         if (idMap[id]) document.getElementById(idMap[id]).value = '';
         // Set modal title to "Yeni ..."
-        const titleMap = { packageModal:'Yeni Paket', serviceModal:'Yeni Hizmet', portfolioModal:'Yeni Proje', testimonialModal:'Yeni Yorum', extraModal:'Yeni Ek Hizmet' };
+        const titleMap = { packageModal:'Yeni Paket', serviceModal:'Yeni Hizmet', portfolioModal:'Yeni Proje', testimonialModal:'Yeni Yorum', extraModal:'Yeni Ek Hizmet', blogModal:'Yeni Yazı' };
         const titleEl = document.getElementById(id.replace('Modal','ModalTitle'));
         if (titleEl && titleMap[id]) titleEl.textContent = titleMap[id];
     }
 
     function fillModal(id, d) {
-        const titleMap = { packageModal:'Paketi Düzenle', serviceModal:'Hizmeti Düzenle', portfolioModal:'Projeyi Düzenle', testimonialModal:'Yorumu Düzenle', extraModal:'Ek Hizmeti Düzenle' };
+        const titleMap = { packageModal:'Paketi Düzenle', serviceModal:'Hizmeti Düzenle', portfolioModal:'Projeyi Düzenle', testimonialModal:'Yorumu Düzenle', extraModal:'Ek Hizmeti Düzenle', blogModal:'Yazıyı Düzenle' };
         const titleEl = document.getElementById(id.replace('Modal','ModalTitle'));
         if (titleEl && titleMap[id]) titleEl.textContent = titleMap[id];
 
@@ -557,6 +612,15 @@
             document.getElementById('extraName').value = d.name || '';
             document.getElementById('extraIcon').value = d.icon || '';
             document.getElementById('extraDesc').value = d.description || '';
+        } else if (id === 'blogModal') {
+            document.getElementById('blogId').value = d.id;
+            document.getElementById('blogTitle').value = d.title || '';
+            document.getElementById('blogSlug').value = d.slug || '';
+            document.getElementById('blogSummary').value = d.summary || '';
+            document.getElementById('blogContent').value = d.content || '';
+            document.getElementById('blogCoverImage').value = d.cover_image || '';
+            document.getElementById('blogCategory').value = d.category || '';
+            document.getElementById('blogPublished').checked = !!d.published;
         }
     }
 
@@ -571,6 +635,7 @@
         await loadPortfolio();
         await loadTestimonials();
         await loadExtras();
+        await loadPosts();
     }
 
     // ── SEO ──
@@ -903,6 +968,67 @@
 
         if (!error) { closeModal('extraModal'); loadExtras(); showStatus('✅ Ek hizmet kaydedildi!', true); }
         else showStatus('❌ ' + error.message, false);
+    }
+
+    // ── BLOG ──
+    async function loadPosts() {
+        const { data } = await db.from('posts').select('*').order('created_at', { ascending: false });
+        const html = (data || []).map(p => `
+            <div class="list-item">
+                <div class="list-item-content">
+                    <h4>${p.title} ${p.published ? '<span class="badge">Yayında</span>' : '<span class="badge" style="background:#8a8580">Taslak</span>'}</h4>
+                    <p>${p.category ? p.category + ' — ' : ''}<span style="color:#b5afa9">/${p.slug}</span></p>
+                </div>
+                <div class="list-item-actions">
+                    <button class="btn-edit" onclick="editPost(${p.id})">Düzenle</button>
+                    <button class="btn-delete" onclick="deleteItem('posts', ${p.id}, loadPosts)">Sil</button>
+                </div>
+            </div>`).join('');
+        document.getElementById('blogList').innerHTML = html || '<p style="color:#8a8580">Henüz blog yazısı yok.</p>';
+    }
+
+    async function editPost(id) {
+        const { data } = await db.from('posts').select('*').eq('id', id).single();
+        if (data) openModal('blogModal', data);
+    }
+
+    async function savePost() {
+        const id = document.getElementById('blogId').value;
+        const payload = {
+            title: document.getElementById('blogTitle').value,
+            slug: document.getElementById('blogSlug').value,
+            summary: document.getElementById('blogSummary').value,
+            content: document.getElementById('blogContent').value,
+            cover_image: document.getElementById('blogCoverImage').value,
+            category: document.getElementById('blogCategory').value,
+            published: document.getElementById('blogPublished').checked,
+            updated_at: new Date().toISOString()
+        };
+
+        let error;
+        if (id) {
+            ({ error } = await db.from('posts').update(payload).eq('id', id));
+        } else {
+            payload.created_at = new Date().toISOString();
+            ({ error } = await db.from('posts').insert(payload));
+        }
+
+        if (!error) { closeModal('blogModal'); loadPosts(); showStatus('✅ Yazı kaydedildi!', true); }
+        else showStatus('❌ ' + error.message, false);
+    }
+
+    function autoSlug() {
+        const id = document.getElementById('blogId').value;
+        if (id) return; // editing existing — don't override
+        const title = document.getElementById('blogTitle').value;
+        const slug = title
+            .toLowerCase()
+            .replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ş/g,'s')
+            .replace(/ı/g,'i').replace(/ö/g,'o').replace(/ç/g,'c')
+            .replace(/[^a-z0-9\s-]/g,'')
+            .trim()
+            .replace(/\s+/g,'-');
+        document.getElementById('blogSlug').value = slug;
     }
 
     // ── SİL ──
