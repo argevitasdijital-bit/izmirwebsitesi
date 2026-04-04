@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /admin.html
+Disallow: /blog-post.html
 
 Sitemap: https://www.izmirwebsitesi.net/sitemap.xml
