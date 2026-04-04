@@ -6,10 +6,11 @@
     <title id="pageTitle">Blog - İzmir Websitesi</title>
     <meta name="description" id="pageDesc" content="Web tasarım, SEO ve dijital pazarlama hakkında bilgiler.">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" id="pageCanonical" href="https://www.izmirwebsitesi.net/blog-post.html">
+    <link rel="canonical" id="pageCanonical" href="https://www.izmirwebsitesi.net/blog">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="shortcut icon" href="/favicon.svg">
     <meta property="og:type" content="article">
+    <meta property="og:url" id="ogUrl" content="https://www.izmirwebsitesi.net/blog">
     <meta property="og:title" id="ogTitle" content="Blog - İzmir Websitesi">
     <meta property="og:description" id="ogDesc" content="">
     <meta property="og:image" id="ogImage" content="https://www.izmirwebsitesi.net/assets/og-image.png">
@@ -183,6 +184,7 @@
         document.getElementById('pageTitle').textContent = metaTitle + ' - İzmir Websitesi';
         document.getElementById('pageDesc').setAttribute('content', metaDesc);
         document.getElementById('pageCanonical').setAttribute('href', 'https://www.izmirwebsitesi.net/blog/' + slug);
+        document.getElementById('ogUrl').setAttribute('content', 'https://www.izmirwebsitesi.net/blog/' + slug);
         document.getElementById('ogTitle').setAttribute('content', metaTitle);
         document.getElementById('ogDesc').setAttribute('content', metaDesc);
         if (data.cover_image) document.getElementById('ogImage').setAttribute('content', data.cover_image);
