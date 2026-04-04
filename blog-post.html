@@ -51,14 +51,22 @@
 
         /* ARTICLE BODY */
         .article-body { padding-bottom: 80px; }
-        .article-content { font-size: 1.02rem; line-height: 1.85; color: var(--text); }
-        .article-content h2 { font-size: 1.5rem; font-weight: 800; margin: 40px 0 16px; }
-        .article-content h3 { font-size: 1.2rem; font-weight: 700; margin: 32px 0 12px; }
-        .article-content p { margin-bottom: 20px; }
-        .article-content ul, .article-content ol { margin: 0 0 20px 24px; }
+        .article-content { font-size: 1.02rem; line-height: 1.85; color: #111; }
+        .article-content h1,
+        .article-content h2,
+        .article-content h3,
+        .article-content h4 { color: #111; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .article-content h1 { font-size: 1.9rem; font-weight: 800; margin: 48px 0 18px; }
+        .article-content h2 { font-size: 1.5rem; font-weight: 800; margin: 40px 0 14px; }
+        .article-content h3 { font-size: 1.2rem; font-weight: 700; margin: 28px 0 10px; }
+        /* Quill boş paragrafları gizle */
+        .article-content p { margin-bottom: 14px; }
+        .article-content p > br:only-child { display: none; }
+        .article-content p:has(> br:only-child) { margin: 0; line-height: 0; }
+        .article-content ul, .article-content ol { margin: 0 0 16px 24px; }
         .article-content li { margin-bottom: 8px; }
         .article-content a { color: var(--accent); text-decoration: underline; }
-        .article-content strong { font-weight: 700; }
+        .article-content strong { font-weight: 700; color: #111; }
         .article-content blockquote { border-left: 4px solid var(--accent); padding: 16px 20px; background: rgba(232,115,74,.06); border-radius: 0 12px 12px 0; margin: 24px 0; font-style: italic; color: var(--muted); }
         .article-content img { max-width: 100%; border-radius: 12px; margin: 16px 0; }
         .article-content code { background: #e8e3de; padding: 2px 7px; border-radius: 5px; font-size: .9em; font-family: monospace; }
